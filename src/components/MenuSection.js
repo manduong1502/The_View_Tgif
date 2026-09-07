@@ -3,19 +3,30 @@
 import { useState } from "react";
 import Image from "next/image";
 import { siteContent } from "@/data/content";
+import ScrollReveal from "./ScrollReveal";
+
+const CATEGORIES = ["Tất cả", "Khai vị", "Món nướng", "Món chính", "Must try"];
 
 export default function MenuSection() {
   const { menu } = siteContent;
+  const [activeTab, setActiveTab] = useState("Tất cả");
   const [selectedDish, setSelectedDish] = useState(null);
 
+  const filteredDishes =
+    activeTab === "Tất cả"
+      ? menu.dishes
+      : menu.dishes.filter(
+          (d) => d.tag.toLowerCase() === activeTab.toLowerCase()
+        );
+
   return (
-    <section id="thuc-don" className="py-20 sm:py-28 relative bg-[#060d17] border-t border-white/5">
+    <section id="thuc-don" className="py-20 sm:py-32 relative bg-[#060d17] border-t border-white/5">
       {/* Ambient glow */}
-      <div className="ambient-glow w-96 h-96 bg-[#cba864]/5 top-10 left-1/3" />
+      <div className="ambient-glow w-[500px] h-[500px] bg-[#cba864]/6 top-10 left-1/3" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="mb-12 sm:mb-16">
+        <ScrollReveal className="mb-12 sm:mb-16">
           <div className="mb-4">
             <span className="kicker-line">{menu.kicker}</span>
           </div>
@@ -25,50 +36,87 @@ export default function MenuSection() {
           <p className="text-slate-300 font-light text-sm sm:text-base leading-relaxed max-w-3xl">
             {menu.description}
           </p>
-        </div>
 
-        {/* 4 Cards Grid */}
+          {/* Category Filter Chips */}
+          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 mt-8 pt-2">
+            {CATEGORIES.map((tab) => (
+              <button
+                key={tab}
+                type="button"
+                onClick={() => setActiveTab(tab)}
+                className={`px-4 py-2 rounded-sm text-xs font-medium tracking-wider uppercase transition-all duration-300 cursor-pointer ${
+                  activeTab === tab
+                    ? "bg-[#cba864] text-[#08111c] font-bold shadow-md shadow-[#cba864]/20 scale-105"
+                    : "bg-[#0f1e31] text-slate-300 border border-white/10 hover:border-[#cba864]/40 hover:text-white"
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+        </ScrollReveal>
+
+        {/* 4 Cards Grid with Staggered Transitions */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {menu.dishes.map((dish, idx) => (
-            <div
+          {filteredDishes.map((dish, idx) => (
+            <ScrollReveal
               key={dish.id}
-              onClick={() => setSelectedDish(dish)}
-              className="luxury-card rounded-md overflow-hidden flex flex-col justify-between cursor-pointer group border border-white/10"
+              delay={
+                idx === 0
+                  ? "delay-100"
+                  : idx === 1
+                  ? "delay-200"
+                  : idx === 2
+                  ? "delay-300"
+                  : "delay-400"
+              }
             >
-              <div>
-                {/* Dish Image Container */}
-                <div className="relative aspect-square sm:aspect-[4/3] w-full overflow-hidden bg-[#0c1827]">
-                  <Image
-                    src={dish.image}
-                    alt={dish.name}
-                    fill
-                    className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0b1624] via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity" />
+              <div
+                onClick={() => setSelectedDish(dish)}
+                className="luxury-card rounded-md overflow-hidden flex flex-col justify-between cursor-pointer group border border-white/10 h-full"
+              >
+                <div>
+                  {/* Dish Image Container */}
+                  <div className="relative aspect-square sm:aspect-[4/3] w-full overflow-hidden bg-[#0c1827]">
+                    <Image
+                      src={dish.image}
+                      alt={dish.name}
+                      fill
+                      className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-108"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0b1624] via-transparent to-transparent opacity-70 group-hover:opacity-35 transition-opacity duration-500" />
+                    
+                    {/* Badge top left */}
+                    <div className="absolute top-3 left-3">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#08111c] bg-[#cba864] px-2.5 py-1 rounded-sm shadow-sm">
+                        {dish.tag}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Dish Content */}
+                  <div className="p-5 sm:p-6">
+                    <h3 className="font-serif text-lg sm:text-xl text-white font-medium mb-2.5 group-hover:text-[#e8d098] transition-colors duration-300 leading-snug">
+                      {dish.name}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-300 font-light leading-relaxed mb-4">
+                      {dish.description}
+                    </p>
+                  </div>
                 </div>
 
-                {/* Dish Content */}
-                <div className="p-5 sm:p-6">
-                  <h3 className="font-serif text-lg sm:text-xl text-white font-medium mb-2.5 group-hover:text-[#e8d098] transition-colors leading-snug">
-                    {dish.name}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-slate-300 font-light leading-relaxed mb-4">
-                    {dish.description}
-                  </p>
+                {/* Bottom Bar */}
+                <div className="px-5 sm:px-6 pb-5 pt-3 border-t border-white/5 flex items-center justify-between">
+                  <span className="text-xs text-slate-400 font-light group-hover:text-slate-200 transition-colors">
+                    {dish.highlight}
+                  </span>
+                  <span className="text-xs text-[#cba864] font-medium tracking-wide group-hover:translate-x-1 transition-transform duration-300">
+                    Xem chi tiết →
+                  </span>
                 </div>
               </div>
-
-              {/* Tag / Category at bottom */}
-              <div className="px-5 sm:px-6 pb-5 pt-0 border-t border-white/5 flex items-center justify-between">
-                <span className="text-xs text-[#cba864] font-sans font-medium tracking-wide">
-                  {dish.tag}
-                </span>
-                <span className="text-[11px] text-slate-400 group-hover:text-white transition-colors">
-                  Chi tiết →
-                </span>
-              </div>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
       </div>
@@ -76,11 +124,11 @@ export default function MenuSection() {
       {/* Dish Quick Detail Modal */}
       {selectedDish && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300"
           onClick={() => setSelectedDish(null)}
         >
           <div
-            className="bg-[#0b1624] border border-[#cba864]/40 rounded-lg max-w-lg w-full overflow-hidden shadow-2xl relative"
+            className="bg-[#0b1624] border border-[#cba864]/50 rounded-lg max-w-lg w-full overflow-hidden shadow-2xl relative animate-in zoom-in-95 duration-300"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="relative h-64 sm:h-72 w-full">
@@ -93,33 +141,43 @@ export default function MenuSection() {
               <button
                 type="button"
                 onClick={() => setSelectedDish(null)}
-                className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black/80"
+                aria-label="Đóng"
+                className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/70 text-white flex items-center justify-center hover:bg-[#cba864] hover:text-[#08111c] transition-colors duration-200 cursor-pointer"
               >
                 ✕
               </button>
             </div>
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs uppercase font-semibold text-[#cba864] tracking-wider">
+            <div className="p-6 sm:p-7">
+              <div className="flex items-center justify-between mb-2.5">
+                <span className="text-xs uppercase font-bold text-[#cba864] tracking-wider">
                   {selectedDish.tag}
                 </span>
-                <span className="text-xs text-slate-400 bg-white/5 px-2.5 py-1 rounded">
+                <span className="text-xs text-slate-300 bg-white/10 px-2.5 py-1 rounded">
                   {selectedDish.highlight}
                 </span>
               </div>
-              <h3 className="font-serif text-2xl text-white font-medium mb-3">
+              <h3 className="font-serif text-2xl sm:text-3xl text-white font-medium mb-3">
                 {selectedDish.name}
               </h3>
-              <p className="text-slate-300 text-sm leading-relaxed mb-6 font-light">
+              <p className="text-slate-200 text-sm leading-relaxed mb-6 font-light">
                 {selectedDish.description}
               </p>
-              <div className="flex items-center justify-between pt-4 border-t border-white/10">
+
+              {/* Extra Gourmet Culinary Note */}
+              <div className="p-3.5 rounded bg-[#070e17] border border-white/5 mb-6 text-xs text-slate-300 flex items-center gap-3">
+                <span className="text-[#cba864] text-base">🍷</span>
+                <span>
+                  <strong>Gợi ý thưởng thức:</strong> Dùng kèm vang trắng Sauvignon Blanc hoặc rượu Sake Nhật ướp lạnh trên du thuyền.
+                </span>
+              </div>
+
+              <div className="pt-2">
                 <a
                   href="#dat-ban"
                   onClick={() => setSelectedDish(null)}
-                  className="btn-gold w-full text-center py-2.5 rounded-sm text-xs font-bold tracking-wider uppercase"
+                  className="btn-gold w-full text-center py-3 rounded-sm text-xs font-bold tracking-wider uppercase inline-block"
                 >
-                  Đặt bàn thưởng thức món này
+                  Đặt Bàn Thưởng Thức Món Này
                 </a>
               </div>
             </div>

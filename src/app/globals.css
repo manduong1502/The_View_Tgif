@@ -5,13 +5,12 @@
   --surface: #0d1b2a;
   --surface-card: #102136;
   --surface-card-hover: #142842;
-  --foreground: #f1f5f9;
-  --foreground-muted: #94a3b8;
+  --foreground: #f8fafc;
+  --foreground-muted: #cbd5e1;
   --gold-primary: #cba864;
-  --gold-light: #e5cd96;
-  --gold-dark: #ad8a42;
-  --gold-gradient: linear-gradient(135deg, #dfc282 0%, #c5a059 50%, #ad8a42 100%);
-  --gold-border: rgba(203, 168, 100, 0.28);
+  --gold-light: #e8d098;
+  --gold-dark: #b58d44;
+  --gold-glow: rgba(203, 168, 100, 0.22);
 }
 
 @theme inline {
@@ -45,42 +44,63 @@ body {
   font-family: var(--font-playfair), Georgia, serif;
 }
 
-/* Gold Gradient Text Utility */
-.text-gold-gradient {
-  background: linear-gradient(135deg, #f3e5be 0%, #dfbe78 40%, #c5a059 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* Luxury Glass Cards */
+/* Luxury Glass Cards with Silky Hover */
 .luxury-card {
-  background: linear-gradient(180deg, rgba(16, 33, 54, 0.72) 0%, rgba(11, 23, 38, 0.88) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  background: linear-gradient(180deg, rgba(16, 33, 54, 0.78) 0%, rgba(10, 21, 35, 0.92) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.4s ease,
+              box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, box-shadow;
 }
 
 .luxury-card:hover {
-  border-color: rgba(203, 168, 100, 0.35);
-  box-shadow: 0 12px 36px -8px rgba(0, 0, 0, 0.6), 0 0 20px -4px rgba(203, 168, 100, 0.12);
-  transform: translateY(-3px);
+  border-color: rgba(203, 168, 100, 0.45);
+  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.7),
+              0 0 24px -2px rgba(203, 168, 100, 0.16);
+  transform: translateY(-4px);
 }
 
-/* Gold Primary CTA Button */
+/* Gold Primary CTA Button with Subtle Shimmer */
 .btn-gold {
+  position: relative;
   background-color: #cda863;
-  background-image: linear-gradient(180deg, #d8b675 0%, #c49d53 100%);
-  color: #08111c;
+  background-image: linear-gradient(135deg, #dfbf78 0%, #c49d53 50%, #b28a3f 100%);
+  color: #070e17;
   font-weight: 600;
-  transition: all 0.25s ease;
-  box-shadow: 0 4px 14px rgba(196, 157, 83, 0.25);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 18px rgba(196, 157, 83, 0.28);
+  overflow: hidden;
+  will-change: transform, box-shadow;
+}
+
+.btn-gold::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 80%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 100%
+  );
+  transform: skewX(-25deg);
+  transition: left 0.75s ease-in-out;
+}
+
+.btn-gold:hover::after {
+  left: 140%;
 }
 
 .btn-gold:hover {
-  background-image: linear-gradient(180deg, #e3c385 0%, #cda863 100%);
-  box-shadow: 0 6px 20px rgba(196, 157, 83, 0.4);
-  transform: translateY(-1px);
+  background-image: linear-gradient(135deg, #ead098 0%, #cfa85e 50%, #bd9549 100%);
+  box-shadow: 0 8px 26px rgba(196, 157, 83, 0.48), 0 0 12px rgba(203, 168, 100, 0.25);
+  transform: translateY(-2px);
 }
 
 .btn-gold:active {
@@ -89,32 +109,34 @@ body {
 
 /* Glass CTA Button */
 .btn-glass {
-  background-color: rgba(18, 36, 58, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #e2e8f0;
-  transition: all 0.25s ease;
-  backdrop-filter: blur(8px);
+  background-color: rgba(18, 36, 58, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #f1f5f9;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(10px);
 }
 
 .btn-glass:hover {
-  background-color: rgba(26, 48, 77, 0.9);
-  border-color: rgba(203, 168, 100, 0.4);
+  background-color: rgba(28, 52, 82, 0.9);
+  border-color: rgba(203, 168, 100, 0.5);
   color: #ffffff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
 }
 
-/* Luxury Input Field */
+/* Luxury Custom Input Field */
 .luxury-input {
-  background-color: rgba(10, 21, 35, 0.85);
+  background-color: rgba(11, 23, 38, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: #f8fafc;
-  transition: all 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .luxury-input:focus {
   border-color: #cba864;
   outline: none;
-  box-shadow: 0 0 0 2px rgba(203, 168, 100, 0.2);
-  background-color: rgba(13, 27, 44, 0.95);
+  box-shadow: 0 0 0 3px rgba(203, 168, 100, 0.22);
+  background-color: rgba(14, 29, 48, 0.98);
 }
 
 .luxury-input::placeholder {
@@ -127,7 +149,7 @@ body {
   align-items: center;
   gap: 0.75rem;
   font-size: 0.75rem;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: #cba864;
   font-weight: 600;
@@ -136,12 +158,58 @@ body {
 .kicker-line::before {
   content: "";
   display: inline-block;
-  width: 24px;
+  width: 26px;
   height: 1.5px;
-  background-color: #cba864;
+  background: linear-gradient(90deg, #cba864, #dfbf78);
 }
 
-/* Custom Scrollbar */
+/* Silky Smooth Scroll Reveal System */
+.reveal-hidden {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger Delays */
+.delay-100 { transition-delay: 100ms; }
+.delay-150 { transition-delay: 150ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+.delay-400 { transition-delay: 400ms; }
+.delay-500 { transition-delay: 500ms; }
+
+/* Subtle floating river animation */
+@keyframes riverFloat {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-6px) scale(1.01);
+  }
+}
+
+.animate-float-slow {
+  animation: riverFloat 8s ease-in-out infinite;
+}
+
+/* Atmospheric Ambient Glowing Orbs */
+.ambient-glow {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+  transition: transform 1.2s ease-out;
+}
+
+/* Custom Gold Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -150,18 +218,9 @@ body {
   background: #08111c;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(203, 168, 100, 0.25);
+  background: rgba(203, 168, 100, 0.28);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(203, 168, 100, 0.45);
-}
-
-/* Atmosphere ambient backdrops */
-.ambient-glow {
-  position: absolute;
-  border-radius: 9999px;
-  filter: blur(100px);
-  pointer-events: none;
-  z-index: 0;
+  background: rgba(203, 168, 100, 0.55);
 }
