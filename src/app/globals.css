@@ -209,18 +209,37 @@ body {
   transition: transform 1.2s ease-out;
 }
 
-/* Custom Gold Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* Floating Gold Dust / River Light Embers */
+@keyframes floatEmber {
+  0% {
+    transform: translateY(100vh) translateX(0) scale(0.8);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.6;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-10vh) translateX(80px) scale(1.2);
+    opacity: 0;
+  }
 }
-::-webkit-scrollbar-track {
-  background: #08111c;
+
+.ember-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, #f3e5be 0%, #cba864 70%, transparent 100%);
+  border-radius: 9999px;
+  box-shadow: 0 0 10px #cba864, 0 0 20px rgba(203, 168, 100, 0.4);
+  animation: floatEmber linear infinite;
 }
-::-webkit-scrollbar-thumb {
-  background: rgba(203, 168, 100, 0.28);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(203, 168, 100, 0.55);
-}
+
+.particle-1 { left: 15%; animation-duration: 18s; animation-delay: 0s; }
+.particle-2 { left: 35%; animation-duration: 24s; animation-delay: 4s; width: 6px; height: 6px; }
+.particle-3 { left: 60%; animation-duration: 20s; animation-delay: 8s; }
+.particle-4 { left: 80%; animation-duration: 26s; animation-delay: 2s; width: 5px; height: 5px; }
+.particle-5 { left: 92%; animation-duration: 22s; animation-delay: 6s; }
+
