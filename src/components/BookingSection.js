@@ -14,8 +14,8 @@ export default function BookingSection({ preselectedPartyType }) {
     phone: "",
     date: "",
     time: "19:00",
-    guests: "2 khách",
-    partyType: preselectedPartyType || "Bàn ăn tối",
+    guests: "2 khách (Hẹn hò / Bàn đôi)",
+    partyType: preselectedPartyType || "Dãy bàn Hoàng Hôn (Golden Hour)",
     notes: "",
   });
 
@@ -37,15 +37,15 @@ export default function BookingSection({ preselectedPartyType }) {
   };
 
   return (
-    <section id="dat-ban" className="py-20 sm:py-32 relative bg-[#08111c] overflow-hidden">
+    <section id="dat-ban" className="py-20 sm:py-32 relative bg-[#060e18] overflow-hidden">
       {/* Ambient glow */}
-      <div className="ambient-glow w-[500px] h-[500px] bg-[#cba864]/6 top-1/3 -right-20" />
-      <div className="ambient-glow w-96 h-96 bg-blue-900/15 bottom-10 left-10" />
+      <div className="ambient-glow w-[500px] h-[500px] bg-[#cba864]/8 top-1/3 -right-20" />
+      <div className="ambient-glow w-96 h-96 bg-blue-950/20 bottom-10 left-10" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           {/* Left Column: Heading & Contact Info Cards */}
-          <div className="lg:col-span-5 flex flex-col justify-between space-y-10">
+          <div className="lg:col-span-5 flex flex-col justify-between space-y-8">
             <ScrollReveal>
               {/* Kicker */}
               <div className="mb-4">
@@ -58,16 +58,16 @@ export default function BookingSection({ preselectedPartyType }) {
               </h2>
 
               {/* Description */}
-              <p className="text-slate-300 font-light text-sm sm:text-base leading-relaxed mb-10 max-w-md">
+              <p className="text-slate-300 font-light text-sm sm:text-base leading-relaxed mb-8 max-w-md">
                 {booking.description}
               </p>
             </ScrollReveal>
 
             {/* Direct Info List */}
-            <ScrollReveal delay="delay-150" className="space-y-6 pt-4 border-t border-white/10">
+            <ScrollReveal delay="delay-150" className="space-y-6 pt-4 border-t border-[#cba864]/20">
               {/* Address */}
               <div className="group">
-                <span className="text-[11px] font-semibold text-[#cba864] tracking-[0.16em] uppercase block mb-1">
+                <span className="text-[11px] font-semibold text-[#cba864] tracking-[0.18em] uppercase block mb-1">
                   {info.addressLabel}
                 </span>
                 <p className="text-sm font-medium text-white">{info.addressText}</p>
@@ -76,12 +76,12 @@ export default function BookingSection({ preselectedPartyType }) {
 
               {/* Hotline */}
               <div className="group">
-                <span className="text-[11px] font-semibold text-[#cba864] tracking-[0.16em] uppercase block mb-1">
+                <span className="text-[11px] font-semibold text-[#cba864] tracking-[0.18em] uppercase block mb-1">
                   {info.hotlineLabel}
                 </span>
                 <a
                   href={`tel:${info.hotlineNumber.replace(/\s+/g, "")}`}
-                  className="text-base font-bold text-white hover:text-[#cba864] transition-colors duration-200 inline-block"
+                  className="text-base font-bold text-gold-gradient hover:opacity-90 transition-opacity inline-block"
                 >
                   {info.hotlineNumber}
                 </a>
@@ -90,7 +90,7 @@ export default function BookingSection({ preselectedPartyType }) {
 
               {/* Opening Hours */}
               <div>
-                <span className="text-[11px] font-semibold text-[#cba864] tracking-[0.16em] uppercase block mb-1">
+                <span className="text-[11px] font-semibold text-[#cba864] tracking-[0.18em] uppercase block mb-1">
                   {info.hoursLabel}
                 </span>
                 <p className="text-sm font-medium text-white">{info.hoursTime}</p>
@@ -99,7 +99,7 @@ export default function BookingSection({ preselectedPartyType }) {
 
               {/* Fanpage */}
               <div>
-                <span className="text-[11px] font-semibold text-[#cba864] tracking-[0.16em] uppercase block mb-1">
+                <span className="text-[11px] font-semibold text-[#cba864] tracking-[0.18em] uppercase block mb-1">
                   {info.fanpageLabel}
                 </span>
                 <a
@@ -118,7 +118,7 @@ export default function BookingSection({ preselectedPartyType }) {
           {/* Right Column: Reservation Form */}
           <div className="lg:col-span-7">
             <ScrollReveal delay="delay-200">
-              <div className="luxury-card rounded-md p-6 sm:p-10 border border-white/10 shadow-2xl">
+              <div className="luxury-card rounded-xl p-6 sm:p-10 border border-[#cba864]/25 shadow-2xl">
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {/* Row 1: Name & Phone */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
@@ -178,7 +178,7 @@ export default function BookingSection({ preselectedPartyType }) {
                         onChange={(e) =>
                           setFormData({ ...formData, time: e.target.value })
                         }
-                        className="w-full px-4 py-3 rounded-sm luxury-input text-sm bg-[#0b1726]"
+                        className="w-full px-4 py-3 rounded-sm luxury-input text-sm bg-[#0a1829]"
                       >
                         <option value="17:00">05:00 PM (Hoàng hôn)</option>
                         <option value="17:30">05:30 PM</option>
@@ -206,7 +206,7 @@ export default function BookingSection({ preselectedPartyType }) {
                         onChange={(e) =>
                           setFormData({ ...formData, guests: e.target.value })
                         }
-                        className="w-full px-4 py-3 rounded-sm luxury-input text-sm bg-[#0b1726]"
+                        className="w-full px-4 py-3 rounded-sm luxury-input text-sm bg-[#0a1829]"
                       >
                         {booking.guestOptions.map((opt) => (
                           <option key={opt} value={opt}>
@@ -217,14 +217,14 @@ export default function BookingSection({ preselectedPartyType }) {
                     </div>
                     <div>
                       <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-300 mb-2">
-                        LOẠI TIỆC
+                        VỊ TRÍ / LOẠI BÀN
                       </label>
                       <select
                         value={formData.partyType}
                         onChange={(e) =>
                           setFormData({ ...formData, partyType: e.target.value })
                         }
-                        className="w-full px-4 py-3 rounded-sm luxury-input text-sm bg-[#0b1726]"
+                        className="w-full px-4 py-3 rounded-sm luxury-input text-sm bg-[#0a1829]"
                       >
                         {booking.partyTypes.map((pt) => (
                           <option key={pt} value={pt}>
@@ -238,11 +238,11 @@ export default function BookingSection({ preselectedPartyType }) {
                   {/* Row 4: Notes */}
                   <div>
                     <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-300 mb-2">
-                      GHI CHÚ
+                      GHI CHÚ ĐẶC BIỆT
                     </label>
                     <textarea
                       rows={3}
-                      placeholder="Yêu cầu thêm về vị trí bàn, trang trí..."
+                      placeholder="Yêu cầu thêm về vị trí bàn sát lan can, setup tiệc sinh nhật..."
                       value={formData.notes}
                       onChange={(e) =>
                         setFormData({ ...formData, notes: e.target.value })
@@ -260,11 +260,11 @@ export default function BookingSection({ preselectedPartyType }) {
                     >
                       <span>
                         {isSubmitting
-                          ? "ĐANG XỬ LÝ YÊU CẦU..."
-                          : "GỬI YÊU CẦU ĐẶT BÀN"}
+                          ? "ĐANG GỬI YÊU CẦU..."
+                          : "GỬI YÊU CẦU ĐẶT BÀN NGAY"}
                       </span>
                       {!isSubmitting && (
-                        <span className="transition-transform duration-300 group-hover:translate-x-1.5">
+                        <span className="transition-transform duration-300 group-hover:translate-x-1.5 font-sans">
                           →
                         </span>
                       )}

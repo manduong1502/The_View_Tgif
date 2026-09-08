@@ -15,10 +15,10 @@ import Footer from "@/components/Footer";
 import FloatingActions from "@/components/FloatingActions";
 
 export default function Home() {
-  const [selectedPartyType, setSelectedPartyType] = useState("Bàn ăn tối");
+  const [selectedPartyType, setSelectedPartyType] = useState("Dãy bàn Hoàng Hôn (Golden Hour)");
 
   return (
-    <main className="min-h-screen bg-[#08111c] text-slate-100 relative selection:bg-[#cba864] selection:text-[#08111c] overflow-hidden">
+    <main className="min-h-screen bg-[#060e18] text-slate-100 relative selection:bg-[#cba864] selection:text-[#060e18] overflow-hidden">
       {/* Living Atmospheric River Background (Ember Dust, Water Mesh, Mouse Aura) */}
       <AtmosphereBackground />
 
@@ -28,7 +28,7 @@ export default function Home() {
       {/* Hero Section */}
       <HeroSection />
 
-      {/* Experience & Spaces Section with Live Photography Switcher */}
+      {/* Real Spaces & Experience Section */}
       <ExperienceSection />
 
       {/* Featured Menu Section with Category Tabs & Wine Pairing */}

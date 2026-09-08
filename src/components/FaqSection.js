@@ -6,19 +6,19 @@ import ScrollReveal from "./ScrollReveal";
 const FAQS = [
   {
     q: "Cầu Rồng phun lửa vào những khung giờ và ngày nào trong tuần?",
-    a: "Màn trình diễn phun lửa và phun nước của Cầu Rồng diễn ra cố định vào lúc 21:00 tối Thứ Bảy và Chủ Nhật hàng tuần. Quý khách nên đặt bàn lúc 19:30 - 20:00 để thưởng thức trọn vẹn bữa tối trước khi chiêm ngưỡng trọn vẹn màn trình diễn ngay trước mắt mà không bị che khuất tầm nhìn.",
+    a: "Màn trình diễn phun lửa và phun nước của Cầu Rồng diễn ra cố định vào lúc 21:00 tối Thứ Bảy và Chủ Nhật hàng tuần. Quý khách nên đặt bàn lúc 18:30 - 19:30 để thưởng thức bữa tối và ngắm hoàng hôn trước khi chiêm ngưỡng trọn vẹn màn trình diễn ngay trước mắt mà không bị vướng tầm nhìn.",
   },
   {
-    q: "Khu vực ban công ngoài trời có cần đặt cọc giữ chỗ trước không?",
-    a: "Khu vực ban công ngoài trời sát lan can view trực diện Cầu Rồng là vị trí được yêu thích nhất, đặc biệt vào các tối cuối tuần. Quý khách nên gửi yêu cầu đặt bàn sớm qua form trên website hoặc liên hệ trực tiếp Hotline 0898 173 183 để được giữ bàn tốt nhất.",
+    q: "Khu vực dãy bàn Hoàng Hôn ngoài trời có cần đặt cọc giữ chỗ trước không?",
+    a: "Dãy bàn ngoài trời sát mép sông Hàn ngắm hoàng hôn và view trực diện Cầu Rồng là vị trí được yêu thích nhất. Quý khách nên đặt chỗ trước qua website hoặc liên hệ trực tiếp Hotline 0898 173 183 để được ưu tiên sắp xếp vị trí đẹp nhất.",
   },
   {
-    q: "Nhà hàng có hỗ trợ trang trí tiệc sinh nhật hoặc cầu hôn lãng mạn không?",
-    a: "Có, The View cung cấp dịch vụ setup hoa tươi, nến thơm, bánh kem và âm nhạc theo chủ đề cho các buổi tiệc kỷ niệm, sinh nhật hoặc lễ cầu hôn tại cả khu vực ban công và phòng VIP riêng.",
+    q: "Nhà hàng có hỗ trợ setup tiệc sinh nhật hoặc lễ cầu hôn không?",
+    a: "Có, The View cung cấp dịch vụ setup hoa tươi, nến thơm, bánh kem và nhạc theo yêu cầu cho các buổi tiệc kỷ niệm, sinh nhật hoặc lễ cầu hôn lãng mạn bên khung cảnh sông Hàn.",
   },
   {
-    q: "Phòng VIP có sức chứa bao nhiêu khách và có phụ thu phòng riêng không?",
-    a: "Phòng VIP có sức chứa từ 6 đến 14 khách với không gian điều hòa riêng biệt, hệ thống âm thanh chất lượng cao và view cửa sổ nhìn thẳng ra sông Hàn. Nhà hàng không phụ thu phí phòng riêng khi đặt set menu tiêu chuẩn.",
+    q: "Sức chứa tối đa cho các buổi tiệc đoàn và sự kiện công ty là bao nhiêu?",
+    a: "The View có thể phục vụ từ nhóm nhỏ 2-4 khách đến các đoàn tiệc lớn 30-80 khách với set menu được thiết kế riêng linh hoạt theo ngân sách.",
   },
 ];
 
@@ -26,9 +26,9 @@ export default function FaqSection() {
   const [openIdx, setOpenIdx] = useState(0);
 
   return (
-    <section className="py-20 sm:py-28 relative bg-[#08111c] border-t border-white/5 overflow-hidden">
+    <section className="py-20 sm:py-28 relative bg-[#060e18] border-t border-[#cba864]/10 overflow-hidden">
       {/* Ambient glow */}
-      <div className="ambient-glow w-96 h-96 bg-blue-900/10 bottom-0 right-10" />
+      <div className="ambient-glow w-96 h-96 bg-blue-950/20 bottom-0 right-10" />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <ScrollReveal className="text-center mb-14">
@@ -48,8 +48,8 @@ export default function FaqSection() {
             return (
               <ScrollReveal key={idx} delay={idx === 0 ? "delay-100" : "delay-200"}>
                 <div
-                  className={`luxury-card rounded-md border transition-all duration-300 overflow-hidden ${
-                    isOpen ? "border-[#cba864]/60 bg-[#0f2035]" : "border-white/10"
+                  className={`luxury-card rounded-xl border transition-all duration-300 overflow-hidden ${
+                    isOpen ? "border-[#cba864]/60 bg-[#0f2238]" : "border-white/10"
                   }`}
                 >
                   <button

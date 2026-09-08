@@ -21,24 +21,25 @@ export default function Navbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-[#08111c]/90 backdrop-blur-md border-b border-white/10 shadow-2xl py-3.5"
-          : "bg-gradient-to-b from-[#08111c]/80 via-[#08111c]/40 to-transparent py-5"
+          ? "bg-[#060e18]/95 backdrop-blur-md border-b border-[#cba864]/20 shadow-2xl py-3"
+          : "bg-gradient-to-b from-[#060e18]/90 via-[#060e18]/50 to-transparent py-5"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
-          {/* Brand Logo */}
+          {/* Official Brand Logo */}
           <Link
             href="/"
             className="flex items-center gap-3 group transition-transform hover:opacity-95"
           >
-            <div className="flex flex-col">
-              <span className="font-serif text-xl sm:text-2xl font-bold tracking-wider text-white flex items-center gap-2">
-                THE VIEW
-              </span>
-              <span className="text-[9px] sm:text-[10px] tracking-[0.28em] text-slate-400 font-sans uppercase font-medium">
-                YACHT RESTAURANT
-              </span>
+            <div className="relative h-10 sm:h-12 w-36 sm:w-44">
+              <Image
+                src={siteContent.brand.logoHorizontal}
+                alt={siteContent.brand.name}
+                fill
+                priority
+                className="object-contain object-left"
+              />
             </div>
           </Link>
 
@@ -48,15 +49,22 @@ export default function Navbar() {
               <a
                 key={link.label}
                 href={link.href}
-                className="text-sm font-medium text-slate-300 hover:text-white transition-colors duration-200 relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#cba864] hover:after:w-full after:transition-all after:duration-300"
+                className="text-sm font-medium text-slate-200 hover:text-[#f3e2b8] transition-colors duration-200 relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#cba864] hover:after:w-full after:transition-all after:duration-300"
               >
                 {link.label}
               </a>
             ))}
           </nav>
 
-          {/* Right CTA Button */}
-          <div className="hidden md:flex items-center gap-4">
+          {/* Right CTA Hotline & Button */}
+          <div className="hidden md:flex items-center gap-5">
+            <a
+              href={`tel:${siteContent.brand.hotline.replace(/\s+/g, "")}`}
+              className="flex items-center gap-2 text-xs font-semibold text-slate-300 hover:text-[#cba864] transition-colors"
+            >
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>{siteContent.brand.hotlineDisplay}</span>
+            </a>
             <a
               href="#dat-ban"
               className="btn-gold px-5 py-2.5 rounded-sm text-xs font-bold tracking-wider uppercase transition-all flex items-center gap-1.5"
@@ -108,7 +116,7 @@ export default function Navbar() {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-[#0a1422]/98 border-b border-white/10 px-6 pt-4 pb-6 space-y-4 backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="md:hidden bg-[#0a1625]/98 border-b border-[#cba864]/20 px-6 pt-4 pb-6 space-y-4 backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-200">
           <nav className="flex flex-col space-y-3">
             {siteContent.navLinks.map((link) => (
               <a
@@ -131,9 +139,10 @@ export default function Navbar() {
             </a>
             <a
               href={`tel:${siteContent.brand.hotline.replace(/\s+/g, "")}`}
-              className="text-center text-xs text-slate-400 hover:text-white py-1 flex items-center justify-center gap-2"
+              className="text-center text-xs text-slate-300 hover:text-[#cba864] py-1 flex items-center justify-center gap-2"
             >
-              <span>Hotline: {siteContent.brand.hotline}</span>
+              <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span>Hotline giữ bàn: {siteContent.brand.hotline}</span>
             </a>
           </div>
         </div>

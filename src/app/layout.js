@@ -38,7 +38,7 @@ export const metadata = {
     siteName: "The View Yacht Restaurant",
     images: [
       {
-        url: "/images/hero-bg.jpg",
+        url: "/images/the-view-sunset.jpg",
         width: 1200,
         height: 630,
         alt: "The View Yacht Restaurant Da Nang",
@@ -56,8 +56,15 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="vi" className={`${playfair.variable} ${beVietnam.variable}`}>
-      <body className="min-h-screen bg-[#08111c] text-slate-100 font-sans selection:bg-[#cba864] selection:text-[#08111c] antialiased">
+    <html
+      lang="vi"
+      suppressHydrationWarning
+      className={`${playfair.variable} ${beVietnam.variable}`}
+    >
+      <body
+        suppressHydrationWarning
+        className="min-h-screen bg-[#060e18] text-slate-100 font-sans selection:bg-[#cba864] selection:text-[#060e18] antialiased"
+      >
         {children}
       </body>
     </html>

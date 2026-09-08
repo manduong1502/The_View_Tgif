@@ -1,19 +1,25 @@
+import Image from "next/image";
 import Link from "next/link";
 import { siteContent } from "@/data/content";
 
 export default function Footer() {
-  const { footer } = siteContent;
+  const { footer, brand } = siteContent;
 
   return (
-    <footer className="bg-[#050c14] border-t border-white/10 pt-16 pb-12 text-slate-300">
+    <footer className="bg-[#040910] border-t border-[#cba864]/15 pt-16 pb-12 text-slate-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* 4 Columns Main Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-14 border-b border-white/10">
-          {/* Col 1: Brand Info */}
+          {/* Col 1: Brand Info & Official Logo */}
           <div className="lg:col-span-4 space-y-4">
-            <h3 className="font-serif text-2xl font-bold tracking-wider text-white">
-              THE VIEW
-            </h3>
+            <div className="relative h-12 w-48 mb-3">
+              <Image
+                src={brand.logoHorizontal}
+                alt={brand.name}
+                fill
+                className="object-contain object-left"
+              />
+            </div>
             <p className="text-xs sm:text-sm font-light text-slate-400 leading-relaxed max-w-sm">
               {footer.about}
             </p>
@@ -21,34 +27,19 @@ export default function Footer() {
 
           {/* Col 2: Contact */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="text-xs font-semibold text-[#cba864] tracking-[0.18em] uppercase">
+            <h4 className="text-xs font-semibold text-[#cba864] tracking-[0.2em] uppercase">
               {footer.columns.contact.title}
             </h4>
             <div className="space-y-1.5 text-xs sm:text-sm font-light text-slate-300">
-              <p>{footer.columns.contact.lines[0]}</p>
-              <p>{footer.columns.contact.lines[1]}</p>
-              <p>
-                <a
-                  href="tel:0898173183"
-                  className="hover:text-white transition-colors"
-                >
-                  {footer.columns.contact.lines[2]}
-                </a>
-              </p>
-              <p>
-                <a
-                  href="#dat-ban"
-                  className="hover:text-[#cba864] transition-colors"
-                >
-                  {footer.columns.contact.lines[3]}
-                </a>
-              </p>
+              {footer.columns.contact.lines.map((line, idx) => (
+                <p key={idx}>{line}</p>
+              ))}
             </div>
           </div>
 
           {/* Col 3: Hours */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="text-xs font-semibold text-[#cba864] tracking-[0.18em] uppercase">
+            <h4 className="text-xs font-semibold text-[#cba864] tracking-[0.2em] uppercase">
               {footer.columns.hours.title}
             </h4>
             <div className="space-y-1.5 text-xs sm:text-sm font-light text-slate-300">
@@ -60,7 +51,7 @@ export default function Footer() {
 
           {/* Col 4: Social */}
           <div className="lg:col-span-2 space-y-3">
-            <h4 className="text-xs font-semibold text-[#cba864] tracking-[0.18em] uppercase">
+            <h4 className="text-xs font-semibold text-[#cba864] tracking-[0.2em] uppercase">
               {footer.columns.social.title}
             </h4>
             <ul className="space-y-2 text-xs sm:text-sm font-light">
@@ -70,7 +61,7 @@ export default function Footer() {
                     href={item.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-[#cba864] transition-colors"
+                    className="hover:text-[#cba864] transition-colors inline-block"
                   >
                     {item.name}
                   </a>

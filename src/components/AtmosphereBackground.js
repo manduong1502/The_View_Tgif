@@ -3,11 +3,12 @@
 import { useEffect, useState } from "react";
 
 export default function AtmosphereBackground() {
+  const [mounted, setMounted] = useState(false);
   const [mousePos, setMousePos] = useState({ x: -500, y: -500 });
 
   useEffect(() => {
+    setMounted(true);
     const handleMouseMove = (e) => {
-      // Throttle slightly for smooth performance
       requestAnimationFrame(() => {
         setMousePos({ x: e.clientX, y: e.clientY });
       });
@@ -17,8 +18,12 @@ export default function AtmosphereBackground() {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
+  if (!mounted) {
+    return null;
+  }
+
   return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" suppressHydrationWarning>
       {/* Dynamic Cursor Spotlight Aura */}
       <div
         className="absolute w-[600px] h-[600px] rounded-full opacity-40 mix-blend-screen transition-transform duration-300 ease-out hidden lg:block"

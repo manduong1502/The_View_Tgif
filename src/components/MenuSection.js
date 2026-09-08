@@ -5,7 +5,7 @@ import Image from "next/image";
 import { siteContent } from "@/data/content";
 import ScrollReveal from "./ScrollReveal";
 
-const CATEGORIES = ["Tất cả", "Khai vị", "Món nướng", "Món chính", "Must try"];
+const CATEGORIES = ["Tất cả", "Khai vị", "Món nướng", "Món chính", "Signature"];
 
 export default function MenuSection() {
   const { menu } = siteContent;
@@ -20,9 +20,9 @@ export default function MenuSection() {
         );
 
   return (
-    <section id="thuc-don" className="py-20 sm:py-32 relative bg-[#060d17] border-t border-white/5">
+    <section id="thuc-don" className="py-20 sm:py-32 relative bg-[#060e18] border-t border-[#cba864]/10">
       {/* Ambient glow */}
-      <div className="ambient-glow w-[500px] h-[500px] bg-[#cba864]/6 top-10 left-1/3" />
+      <div className="ambient-glow w-[500px] h-[500px] bg-[#cba864]/8 top-10 left-1/3" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
@@ -44,10 +44,10 @@ export default function MenuSection() {
                 key={tab}
                 type="button"
                 onClick={() => setActiveTab(tab)}
-                className={`px-4 py-2 rounded-sm text-xs font-medium tracking-wider uppercase transition-all duration-300 cursor-pointer ${
+                className={`px-5 py-2.5 rounded-sm text-xs font-semibold tracking-wider uppercase transition-all duration-300 cursor-pointer ${
                   activeTab === tab
-                    ? "bg-[#cba864] text-[#08111c] font-bold shadow-md shadow-[#cba864]/20 scale-105"
-                    : "bg-[#0f1e31] text-slate-300 border border-white/10 hover:border-[#cba864]/40 hover:text-white"
+                    ? "bg-gradient-to-r from-[#cba864] to-[#dfbf78] text-[#060e18] font-bold shadow-lg shadow-[#cba864]/25 scale-105"
+                    : "bg-[#0c1c2e] text-slate-300 border border-white/10 hover:border-[#cba864]/50 hover:text-white"
                 }`}
               >
                 {tab}
@@ -73,31 +73,40 @@ export default function MenuSection() {
             >
               <div
                 onClick={() => setSelectedDish(dish)}
-                className="luxury-card rounded-md overflow-hidden flex flex-col justify-between cursor-pointer group border border-white/10 h-full"
+                className="luxury-card rounded-xl overflow-hidden flex flex-col justify-between cursor-pointer group border border-[#cba864]/20 h-full hover:border-[#cba864]/60"
               >
                 <div>
                   {/* Dish Image Container */}
-                  <div className="relative aspect-square sm:aspect-[4/3] w-full overflow-hidden bg-[#0c1827]">
+                  <div className="relative aspect-square sm:aspect-[4/3] w-full overflow-hidden bg-[#0c1c2e]">
                     <Image
                       src={dish.image}
                       alt={dish.name}
                       fill
-                      className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-108"
+                      className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0b1624] via-transparent to-transparent opacity-70 group-hover:opacity-35 transition-opacity duration-500" />
-                    
-                    {/* Badge top left */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#091524] via-transparent to-transparent opacity-80 group-hover:opacity-40 transition-opacity duration-500" />
+
+                    {/* Tag badge top left */}
                     <div className="absolute top-3 left-3">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#08111c] bg-[#cba864] px-2.5 py-1 rounded-sm shadow-sm">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#060e18] bg-[#cba864] px-2.5 py-1 rounded shadow-md">
                         {dish.tag}
                       </span>
                     </div>
+
+                    {/* Price Tag top right */}
+                    {dish.price && (
+                      <div className="absolute top-3 right-3">
+                        <span className="text-xs font-serif font-bold text-[#f3e2b8] bg-[#060e18]/85 px-2.5 py-1 rounded border border-[#cba864]/40 backdrop-blur-md">
+                          {dish.price}
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   {/* Dish Content */}
                   <div className="p-5 sm:p-6">
-                    <h3 className="font-serif text-lg sm:text-xl text-white font-medium mb-2.5 group-hover:text-[#e8d098] transition-colors duration-300 leading-snug">
+                    <h3 className="font-serif text-lg sm:text-xl text-white font-medium mb-2 group-hover:text-[#f3e2b8] transition-colors duration-300 leading-snug">
                       {dish.name}
                     </h3>
                     <p className="text-xs sm:text-sm text-slate-300 font-light leading-relaxed mb-4">
@@ -108,11 +117,11 @@ export default function MenuSection() {
 
                 {/* Bottom Bar */}
                 <div className="px-5 sm:px-6 pb-5 pt-3 border-t border-white/5 flex items-center justify-between">
-                  <span className="text-xs text-slate-400 font-light group-hover:text-slate-200 transition-colors">
+                  <span className="text-xs text-[#f3e2b8] font-light">
                     {dish.highlight}
                   </span>
                   <span className="text-xs text-[#cba864] font-medium tracking-wide group-hover:translate-x-1 transition-transform duration-300">
-                    Xem chi tiết →
+                    Chi tiết →
                   </span>
                 </div>
               </div>
@@ -128,7 +137,7 @@ export default function MenuSection() {
           onClick={() => setSelectedDish(null)}
         >
           <div
-            className="bg-[#0b1624] border border-[#cba864]/50 rounded-lg max-w-lg w-full overflow-hidden shadow-2xl relative animate-in zoom-in-95 duration-300"
+            className="bg-[#0b1a2d] border border-[#cba864]/50 rounded-xl max-w-lg w-full overflow-hidden shadow-2xl relative animate-in zoom-in-95 duration-300"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="relative h-64 sm:h-72 w-full">
@@ -142,7 +151,7 @@ export default function MenuSection() {
                 type="button"
                 onClick={() => setSelectedDish(null)}
                 aria-label="Đóng"
-                className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/70 text-white flex items-center justify-center hover:bg-[#cba864] hover:text-[#08111c] transition-colors duration-200 cursor-pointer"
+                className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/70 text-white flex items-center justify-center hover:bg-[#cba864] hover:text-[#060e18] transition-colors duration-200 cursor-pointer"
               >
                 ✕
               </button>
@@ -152,9 +161,11 @@ export default function MenuSection() {
                 <span className="text-xs uppercase font-bold text-[#cba864] tracking-wider">
                   {selectedDish.tag}
                 </span>
-                <span className="text-xs text-slate-300 bg-white/10 px-2.5 py-1 rounded">
-                  {selectedDish.highlight}
-                </span>
+                {selectedDish.price && (
+                  <span className="text-sm font-serif font-bold text-[#f3e2b8] bg-[#060e18] px-3 py-1 rounded border border-[#cba864]/40">
+                    {selectedDish.price}
+                  </span>
+                )}
               </div>
               <h3 className="font-serif text-2xl sm:text-3xl text-white font-medium mb-3">
                 {selectedDish.name}
@@ -164,10 +175,10 @@ export default function MenuSection() {
               </p>
 
               {/* Extra Gourmet Culinary Note */}
-              <div className="p-3.5 rounded bg-[#070e17] border border-white/5 mb-6 text-xs text-slate-300 flex items-center gap-3">
-                <span className="text-[#cba864] text-base">🍷</span>
+              <div className="p-3.5 rounded-lg bg-[#060e18] border border-[#cba864]/20 mb-6 text-xs text-slate-300 flex items-center gap-3">
+                <span className="text-[#cba864] text-lg">🍷</span>
                 <span>
-                  <strong>Gợi ý thưởng thức:</strong> Dùng kèm vang trắng Sauvignon Blanc hoặc rượu Sake Nhật ướp lạnh trên du thuyền.
+                  <strong>Gợi ý Pairing:</strong> Dùng kèm vang trắng Sauvignon Blanc hoặc rượu Sake thượng hạng ướp lạnh trên du thuyền.
                 </span>
               </div>
 
@@ -175,7 +186,7 @@ export default function MenuSection() {
                 <a
                   href="#dat-ban"
                   onClick={() => setSelectedDish(null)}
-                  className="btn-gold w-full text-center py-3 rounded-sm text-xs font-bold tracking-wider uppercase inline-block"
+                  className="btn-gold w-full text-center py-3.5 rounded-sm text-xs font-bold tracking-wider uppercase inline-block"
                 >
                   Đặt Bàn Thưởng Thức Món Này
                 </a>
