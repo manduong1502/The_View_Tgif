@@ -48,9 +48,12 @@ export const metadata = {
     type: "website",
   },
   icons: {
-    icon: "/images/logo/TheView-LogoSymbol.png",
-    shortcut: "/images/logo/TheView-LogoSymbol.png",
-    apple: "/images/logo/TheView-LogoSymbol.png",
+    icon: [
+      { url: "/images/logo_vuong.png", type: "image/png" },
+      { url: "/favicon.ico" }
+    ],
+    shortcut: "/images/logo_vuong.png",
+    apple: "/images/logo_vuong.png",
   },
 };
 
