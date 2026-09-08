@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 const { execSync } = require('child_process');
 
 console.log('🚀 Đang chuẩn bị gói triển khai cPanel hoàn hảo (theview.tgifgroupvn.com)...');
@@ -91,25 +92,54 @@ ErrorDocument 404 /404.html
 fs.writeFileSync(path.join(outDir, '.htaccess'), htaccessContent, 'utf8');
 console.log('✅ Đã tạo file .htaccess chuẩn MIME types và HTTPS');
 
-// 4. Compress out directory into theview-deploy.zip
-const zipFile = path.join(__dirname, '..', 'theview-deploy.zip');
-if (fs.existsSync(zipFile)) {
-  try { fs.unlinkSync(zipFile); } catch(e) {}
+// 4. Safe Unicode-compliant Zip via Temp Directory
+function copyDirRecursive(src, dest) {
+  fs.mkdirSync(dest, { recursive: true });
+  const entries = fs.readdirSync(src, { withFileTypes: true });
+  for (const entry of entries) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+    if (entry.isDirectory()) {
+      copyDirRecursive(srcPath, destPath);
+    } else {
+      fs.copyFileSync(srcPath, destPath);
+    }
+  }
 }
 
-console.log('🗜️ Đang tạo file theview-deploy.zip...');
+const tempOutDir = path.join(os.tmpdir(), 'theview_export_clean');
+if (fs.existsSync(tempOutDir)) {
+  fs.rmSync(tempOutDir, { recursive: true, force: true });
+}
+console.log('📋 Đang chuẩn bị tệp nén...');
+copyDirRecursive(outDir, tempOutDir);
+
+const tempZip = path.join(os.tmpdir(), 'theview-deploy.zip');
+if (fs.existsSync(tempZip)) {
+  try { fs.unlinkSync(tempZip); } catch(e) {}
+}
+
+const finalZip = path.join(__dirname, '..', 'theview-deploy.zip');
+if (fs.existsSync(finalZip)) {
+  try { fs.unlinkSync(finalZip); } catch(e) {}
+}
+
+console.log('🗜️ Đang tạo file theview-deploy.zip chuẩn POSIX cho Linux cPanel...');
+execSync(`tar.exe -a -c -f "${tempZip}" -C "${tempOutDir}" .`, { stdio: 'inherit' });
+fs.copyFileSync(tempZip, finalZip);
+
+// Clean temp directory
 try {
-  execSync(`powershell -Command "Compress-Archive -Path '${outDir}\\*' -DestinationPath '${zipFile}' -Force"`, { stdio: 'inherit' });
-} catch (err) {
-  console.error('Lỗi khi nén bằng PowerShell:', err.message);
-}
+  fs.rmSync(tempOutDir, { recursive: true, force: true });
+  fs.unlinkSync(tempZip);
+} catch(e) {}
 
-if (fs.existsSync(zipFile)) {
-  const stat = fs.statSync(zipFile);
+if (fs.existsSync(finalZip)) {
+  const stat = fs.statSync(finalZip);
   const sizeMB = (stat.size / (1024 * 1024)).toFixed(2);
   console.log('\n======================================================');
   console.log(`🎉 ĐÓNG GÓI THÀNH CÔNG: theview-deploy.zip (${sizeMB} MB)`);
-  console.log('📍 Đường dẫn file nén:');
-  console.log(`   ${zipFile}`);
+  console.log('📍 Đường dẫn file nén chuẩn Linux:');
+  console.log(`   ${finalZip}`);
   console.log('======================================================');
 }
