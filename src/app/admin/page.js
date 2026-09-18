@@ -284,7 +284,7 @@ export default function AdminDashboard() {
       <div className="min-h-screen bg-[#060e18] flex items-center justify-center px-4 relative overflow-hidden">
         <div className="ambient-glow w-[500px] h-[500px] bg-[#cba864]/10 top-1/4 left-1/4" />
 
-        <div className="luxury-card max-w-md w-full rounded-2xl p-8 sm:p-10 border border-[#cba864]/40 shadow-2xl relative z-10 text-center">
+        <div className="admin-card max-w-md w-full rounded-2xl p-8 sm:p-10 border border-[#cba864]/40 shadow-2xl relative z-10 text-center">
           <div className="relative h-12 w-44 mx-auto mb-6">
             <Image
               src={formData?.brand?.logoHorizontal || "/images/logo/TheView-HorizontalLogo-01.png"}
@@ -308,7 +308,7 @@ export default function AdminDashboard() {
                 value={passwordInput}
                 onChange={(e) => setPasswordInput(e.target.value)}
                 required
-                className="luxury-input w-full px-4 py-3 rounded-md text-sm text-center"
+                className="admin-input w-full px-4 py-3 rounded-md text-sm text-center"
               />
             </div>
 
@@ -318,7 +318,7 @@ export default function AdminDashboard() {
 
             <button
               type="submit"
-              className="btn-gold w-full py-3 rounded-md text-xs font-bold uppercase tracking-wider cursor-pointer"
+              className="admin-btn-gold w-full py-3 rounded-md text-xs font-bold uppercase tracking-wider cursor-pointer"
             >
               Vào Bảng Điều Khiển →
             </button>
@@ -384,7 +384,7 @@ export default function AdminDashboard() {
           <Link
             href="/"
             target="_blank"
-            className="btn-glass px-3 sm:px-4 py-2 rounded text-xs font-medium flex items-center gap-1.5"
+            className="admin-btn-secondary px-3 sm:px-4 py-2 rounded text-xs font-medium flex items-center gap-1.5"
           >
             <span>Xem website ↗</span>
           </Link>
@@ -392,7 +392,7 @@ export default function AdminDashboard() {
           <button
             type="button"
             onClick={exportJson}
-            className="btn-glass px-3 sm:px-4 py-2 rounded text-xs font-medium flex items-center gap-1.5 cursor-pointer"
+            className="admin-btn-secondary px-3 sm:px-4 py-2 rounded text-xs font-medium flex items-center gap-1.5 cursor-pointer"
             title="Tải file content.json về máy tính để sao lưu"
           >
             <span>Tải file JSON</span>
@@ -402,7 +402,7 @@ export default function AdminDashboard() {
             type="button"
             onClick={handleSave}
             disabled={saveStatus.state === "saving"}
-            className="btn-gold px-4 sm:px-6 py-2 rounded text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-[#cba864]/20 cursor-pointer"
+            className="admin-btn-gold px-4 sm:px-6 py-2 rounded text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-[#cba864]/20 cursor-pointer"
           >
             <span>{saveStatus.state === "saving" ? "Đang lưu..." : "Lưu tất cả"}</span>
           </button>
@@ -451,7 +451,7 @@ export default function AdminDashboard() {
               key={tab.id}
               type="button"
               onClick={() => setActiveTab(tab.id)}
-              className={`w-full text-left px-3.5 py-2.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center justify-between cursor-pointer ${
+              className={`w-full text-left px-3.5 py-2.5 rounded-lg text-xs font-medium transition-colors duration-100 flex items-center justify-between cursor-pointer ${
                 activeTab === tab.id
                   ? "bg-[#cba864] text-[#060e18] font-bold shadow-md shadow-[#cba864]/20"
                   : "bg-[#091524] text-slate-300 hover:bg-[#0f2137] hover:text-white border border-white/5"
@@ -475,10 +475,10 @@ export default function AdminDashboard() {
         </div>
 
         {/* MAIN EDITING FORM PANEL */}
-        <div className="lg:col-span-9 luxury-card rounded-2xl p-6 sm:p-8 border border-[#cba864]/25 shadow-2xl">
+        <div className="lg:col-span-9 admin-card rounded-2xl p-6 sm:p-8 border border-[#cba864]/25 shadow-2xl">
           {/* TAB 1: BRAND */}
           {activeTab === "brand" && (
-            <div className="space-y-6 animate-in fade-in duration-200">
+            <div className="space-y-6">
               <div className="border-b border-white/10 pb-4">
                 <h2 className="font-serif text-xl sm:text-2xl text-white">Thương Hiệu & Thông Tin Liên Hệ</h2>
                 <p className="text-xs text-slate-300 mt-1">Thông tin cơ bản hiển thị trên Navbar, Footer và các mục liên hệ.</p>
@@ -491,7 +491,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={formData.brand?.name || ""}
                     onChange={(e) => handleFieldChange("brand", "name", e.target.value)}
-                    className="luxury-input w-full px-3.5 py-2.5 rounded text-sm"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm"
                   />
                 </div>
 
@@ -501,7 +501,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={formData.brand?.tagline || ""}
                     onChange={(e) => handleFieldChange("brand", "tagline", e.target.value)}
-                    className="luxury-input w-full px-3.5 py-2.5 rounded text-sm"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm"
                   />
                 </div>
 
@@ -511,7 +511,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={formData.brand?.hotline || ""}
                     onChange={(e) => handleFieldChange("brand", "hotline", e.target.value)}
-                    className="luxury-input w-full px-3.5 py-2.5 rounded text-sm"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm"
                   />
                 </div>
 
@@ -521,7 +521,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={formData.brand?.hotlineDisplay || ""}
                     onChange={(e) => handleFieldChange("brand", "hotlineDisplay", e.target.value)}
-                    className="luxury-input w-full px-3.5 py-2.5 rounded text-sm"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm"
                   />
                 </div>
 
@@ -531,7 +531,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={formData.brand?.address || ""}
                     onChange={(e) => handleFieldChange("brand", "address", e.target.value)}
-                    className="luxury-input w-full px-3.5 py-2.5 rounded text-sm"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm"
                   />
                 </div>
 
@@ -541,7 +541,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={formData.brand?.addressDetail || ""}
                     onChange={(e) => handleFieldChange("brand", "addressDetail", e.target.value)}
-                    className="luxury-input w-full px-3.5 py-2.5 rounded text-sm"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm"
                   />
                 </div>
 
@@ -551,7 +551,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={formData.brand?.hours || ""}
                     onChange={(e) => handleFieldChange("brand", "hours", e.target.value)}
-                    className="luxury-input w-full px-3.5 py-2.5 rounded text-sm"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm"
                   />
                 </div>
 
@@ -561,7 +561,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={formData.brand?.days || ""}
                     onChange={(e) => handleFieldChange("brand", "days", e.target.value)}
-                    className="luxury-input w-full px-3.5 py-2.5 rounded text-sm"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm"
                   />
                 </div>
 
@@ -571,7 +571,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={formData.brand?.fanpageUrl || ""}
                     onChange={(e) => handleFieldChange("brand", "fanpageUrl", e.target.value)}
-                    className="luxury-input w-full px-3.5 py-2.5 rounded text-sm"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm"
                   />
                 </div>
 
@@ -581,7 +581,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={formData.brand?.mapUrl || ""}
                     onChange={(e) => handleFieldChange("brand", "mapUrl", e.target.value)}
-                    className="luxury-input w-full px-3.5 py-2.5 rounded text-sm"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm"
                   />
                 </div>
 
@@ -591,7 +591,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={formData.brand?.logoHorizontal || ""}
                     onChange={(e) => handleFieldChange("brand", "logoHorizontal", e.target.value)}
-                    className="luxury-input w-full px-3.5 py-2.5 rounded text-sm font-mono text-xs"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm font-mono text-xs"
                   />
                 </div>
 
@@ -601,7 +601,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={formData.brand?.logoSquare || ""}
                     onChange={(e) => handleFieldChange("brand", "logoSquare", e.target.value)}
-                    className="luxury-input w-full px-3.5 py-2.5 rounded text-sm font-mono text-xs"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm font-mono text-xs"
                   />
                 </div>
               </div>
@@ -610,7 +610,7 @@ export default function AdminDashboard() {
 
           {/* TAB 2: HERO BANNER */}
           {activeTab === "hero" && (
-            <div className="space-y-6 animate-in fade-in duration-200">
+            <div className="space-y-6">
               <div className="border-b border-white/10 pb-4">
                 <h2 className="font-serif text-xl sm:text-2xl text-white">Hero Banner (Đầu Trang)</h2>
                 <p className="text-xs text-slate-300 mt-1">Nội dung tiêu đề lớn, đoạn mở đầu và các nút kêu gọi hành động.</p>
@@ -623,7 +623,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={formData.hero?.kicker || ""}
                     onChange={(e) => handleFieldChange("hero", "kicker", e.target.value)}
-                    className="luxury-input w-full px-3.5 py-2.5 rounded text-sm"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm"
                   />
                 </div>
 
@@ -634,7 +634,7 @@ export default function AdminDashboard() {
                       type="text"
                       value={formData.hero?.titleLine1 || ""}
                       onChange={(e) => handleFieldChange("hero", "titleLine1", e.target.value)}
-                      className="luxury-input w-full px-3.5 py-2.5 rounded text-sm"
+                      className="admin-input w-full px-3.5 py-2.5 rounded text-sm"
                     />
                   </div>
 
@@ -644,7 +644,7 @@ export default function AdminDashboard() {
                       type="text"
                       value={formData.hero?.titleLine2Highlight || ""}
                       onChange={(e) => handleFieldChange("hero", "titleLine2Highlight", e.target.value)}
-                      className="luxury-input w-full px-3.5 py-2.5 rounded text-sm text-[#cba864] font-bold"
+                      className="admin-input w-full px-3.5 py-2.5 rounded text-sm text-[#cba864] font-bold"
                     />
                   </div>
 
@@ -654,7 +654,7 @@ export default function AdminDashboard() {
                       type="text"
                       value={formData.hero?.titleLine2Rest || ""}
                       onChange={(e) => handleFieldChange("hero", "titleLine2Rest", e.target.value)}
-                      className="luxury-input w-full px-3.5 py-2.5 rounded text-sm"
+                      className="admin-input w-full px-3.5 py-2.5 rounded text-sm"
                     />
                   </div>
                 </div>
@@ -665,7 +665,7 @@ export default function AdminDashboard() {
                     rows={3}
                     value={formData.hero?.description || ""}
                     onChange={(e) => handleFieldChange("hero", "description", e.target.value)}
-                    className="luxury-input w-full px-3.5 py-2.5 rounded text-sm leading-relaxed"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm leading-relaxed"
                   />
                 </div>
 
@@ -676,7 +676,7 @@ export default function AdminDashboard() {
                       type="text"
                       value={formData.hero?.ctaPrimary || ""}
                       onChange={(e) => handleFieldChange("hero", "ctaPrimary", e.target.value)}
-                      className="luxury-input w-full px-3.5 py-2.5 rounded text-sm"
+                      className="admin-input w-full px-3.5 py-2.5 rounded text-sm"
                     />
                   </div>
 
@@ -686,7 +686,7 @@ export default function AdminDashboard() {
                       type="text"
                       value={formData.hero?.ctaSecondary || ""}
                       onChange={(e) => handleFieldChange("hero", "ctaSecondary", e.target.value)}
-                      className="luxury-input w-full px-3.5 py-2.5 rounded text-sm"
+                      className="admin-input w-full px-3.5 py-2.5 rounded text-sm"
                     />
                   </div>
                 </div>
@@ -707,7 +707,7 @@ export default function AdminDashboard() {
                             stats[idx] = { ...stats[idx], value: e.target.value };
                             handleFieldChange("hero", "stats", stats);
                           }}
-                          className="luxury-input w-full px-3 py-1.5 rounded text-xs text-[#cba864] font-bold"
+                          className="admin-input w-full px-3 py-1.5 rounded text-xs text-[#cba864] font-bold"
                         />
                         <input
                           type="text"
@@ -718,7 +718,7 @@ export default function AdminDashboard() {
                             stats[idx] = { ...stats[idx], label: e.target.value };
                             handleFieldChange("hero", "stats", stats);
                           }}
-                          className="luxury-input w-full px-3 py-1.5 rounded text-xs"
+                          className="admin-input w-full px-3 py-1.5 rounded text-xs"
                         />
                       </div>
                     ))}
@@ -730,7 +730,7 @@ export default function AdminDashboard() {
 
           {/* TAB 3: MOMENTS */}
           {activeTab === "moments" && (
-            <div className="space-y-6 animate-in fade-in duration-200">
+            <div className="space-y-6">
               <div className="border-b border-white/10 pb-4">
                 <h2 className="font-serif text-xl sm:text-2xl text-white">3 Khoảnh Khắc Thực Tế (Moments)</h2>
                 <p className="text-xs text-slate-300 mt-1">Chỉnh sửa 3 mốc Hoàng Hôn, Về Đêm và Ban Ngày chuyển đổi ảnh trên Hero.</p>
@@ -756,7 +756,7 @@ export default function AdminDashboard() {
                             moments[idx] = { ...moments[idx], label: e.target.value };
                             setFormData((prev) => ({ ...prev, moments }));
                           }}
-                          className="luxury-input w-full px-3 py-2 rounded text-xs"
+                          className="admin-input w-full px-3 py-2 rounded text-xs"
                         />
                       </div>
 
@@ -770,7 +770,7 @@ export default function AdminDashboard() {
                             moments[idx] = { ...moments[idx], shortLabel: e.target.value };
                             setFormData((prev) => ({ ...prev, moments }));
                           }}
-                          className="luxury-input w-full px-3 py-2 rounded text-xs"
+                          className="admin-input w-full px-3 py-2 rounded text-xs"
                         />
                       </div>
 
@@ -784,7 +784,7 @@ export default function AdminDashboard() {
                             moments[idx] = { ...moments[idx], badge: e.target.value };
                             setFormData((prev) => ({ ...prev, moments }));
                           }}
-                          className="luxury-input w-full px-3 py-2 rounded text-xs"
+                          className="admin-input w-full px-3 py-2 rounded text-xs"
                         />
                       </div>
                     </div>
@@ -800,7 +800,7 @@ export default function AdminDashboard() {
                             moments[idx] = { ...moments[idx], headline: e.target.value };
                             setFormData((prev) => ({ ...prev, moments }));
                           }}
-                          className="luxury-input w-full px-3 py-2 rounded text-xs font-semibold"
+                          className="admin-input w-full px-3 py-2 rounded text-xs font-semibold"
                         />
                       </div>
 
@@ -814,7 +814,7 @@ export default function AdminDashboard() {
                             moments[idx] = { ...moments[idx], image: e.target.value };
                             setFormData((prev) => ({ ...prev, moments }));
                           }}
-                          className="luxury-input w-full px-3 py-2 rounded text-xs font-mono"
+                          className="admin-input w-full px-3 py-2 rounded text-xs font-mono"
                         />
                       </div>
                     </div>
@@ -829,7 +829,7 @@ export default function AdminDashboard() {
                           moments[idx] = { ...moments[idx], description: e.target.value };
                           setFormData((prev) => ({ ...prev, moments }));
                         }}
-                        className="luxury-input w-full px-3 py-2 rounded text-xs leading-relaxed"
+                        className="admin-input w-full px-3 py-2 rounded text-xs leading-relaxed"
                       />
                     </div>
                   </div>
@@ -840,7 +840,7 @@ export default function AdminDashboard() {
 
           {/* TAB 4: EXPERIENCE */}
           {activeTab === "experience" && (
-            <div className="space-y-6 animate-in fade-in duration-200">
+            <div className="space-y-6">
               <div className="border-b border-white/10 pb-4">
                 <h2 className="font-serif text-xl sm:text-2xl text-white">Không Gian & Khu Vực (Experience)</h2>
                 <p className="text-xs text-slate-300 mt-1">Chỉnh sửa nội dung phần giới thiệu không gian thực tế du thuyền và các khu vực.</p>
@@ -853,7 +853,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={formData.experience?.kicker || ""}
                     onChange={(e) => handleFieldChange("experience", "kicker", e.target.value)}
-                    className="luxury-input w-full px-3.5 py-2.5 rounded text-sm"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm"
                   />
                 </div>
 
@@ -863,7 +863,7 @@ export default function AdminDashboard() {
                     rows={2}
                     value={formData.experience?.headline || ""}
                     onChange={(e) => handleFieldChange("experience", "headline", e.target.value)}
-                    className="luxury-input w-full px-3.5 py-2.5 rounded text-sm font-serif"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm font-serif"
                   />
                 </div>
 
@@ -883,7 +883,7 @@ export default function AdminDashboard() {
                               zones[idx] = { ...zones[idx], number: e.target.value };
                               handleFieldChange("experience", "zones", zones);
                             }}
-                            className="luxury-input w-full px-3 py-1.5 rounded text-xs text-[#cba864]"
+                            className="admin-input w-full px-3 py-1.5 rounded text-xs text-[#cba864]"
                           />
                         </div>
                         <div>
@@ -896,7 +896,7 @@ export default function AdminDashboard() {
                               zones[idx] = { ...zones[idx], title: e.target.value };
                               handleFieldChange("experience", "zones", zones);
                             }}
-                            className="luxury-input w-full px-3 py-1.5 rounded text-xs font-semibold"
+                            className="admin-input w-full px-3 py-1.5 rounded text-xs font-semibold"
                           />
                         </div>
                         <div>
@@ -909,7 +909,7 @@ export default function AdminDashboard() {
                               zones[idx] = { ...zones[idx], capacity: e.target.value };
                               handleFieldChange("experience", "zones", zones);
                             }}
-                            className="luxury-input w-full px-3 py-1.5 rounded text-xs"
+                            className="admin-input w-full px-3 py-1.5 rounded text-xs"
                           />
                         </div>
                       </div>
@@ -925,7 +925,7 @@ export default function AdminDashboard() {
                               zones[idx] = { ...zones[idx], badge: e.target.value };
                               handleFieldChange("experience", "zones", zones);
                             }}
-                            className="luxury-input w-full px-3 py-1.5 rounded text-xs"
+                            className="admin-input w-full px-3 py-1.5 rounded text-xs"
                           />
                         </div>
                         <div>
@@ -938,7 +938,7 @@ export default function AdminDashboard() {
                               zones[idx] = { ...zones[idx], image: e.target.value };
                               handleFieldChange("experience", "zones", zones);
                             }}
-                            className="luxury-input w-full px-3 py-1.5 rounded text-xs font-mono"
+                            className="admin-input w-full px-3 py-1.5 rounded text-xs font-mono"
                           />
                         </div>
                       </div>
@@ -953,7 +953,7 @@ export default function AdminDashboard() {
                             zones[idx] = { ...zones[idx], description: e.target.value };
                             handleFieldChange("experience", "zones", zones);
                           }}
-                          className="luxury-input w-full px-3 py-1.5 rounded text-xs"
+                          className="admin-input w-full px-3 py-1.5 rounded text-xs"
                         />
                       </div>
                     </div>
@@ -965,7 +965,7 @@ export default function AdminDashboard() {
 
           {/* TAB 5: MENU & DISHES */}
           {activeTab === "menu" && (
-            <div className="space-y-6 animate-in fade-in duration-200">
+            <div className="space-y-6">
               <div className="flex items-center justify-between border-b border-white/10 pb-4">
                 <div>
                   <h2 className="font-serif text-xl sm:text-2xl text-white">Thực Đơn Tuyển Chọn (Menu)</h2>
@@ -974,7 +974,7 @@ export default function AdminDashboard() {
                 <button
                   type="button"
                   onClick={handleAddDish}
-                  className="btn-gold px-4 py-2 rounded text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
+                  className="admin-btn-gold px-4 py-2 rounded text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
                 >
                   <span>+ Thêm món mới</span>
                 </button>
@@ -987,7 +987,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={formData.menu?.headline || ""}
                     onChange={(e) => handleFieldChange("menu", "headline", e.target.value)}
-                    className="luxury-input w-full px-3.5 py-2.5 rounded text-sm font-serif"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm font-serif"
                   />
                 </div>
                 <div>
@@ -996,7 +996,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={formData.menu?.description || ""}
                     onChange={(e) => handleFieldChange("menu", "description", e.target.value)}
-                    className="luxury-input w-full px-3.5 py-2.5 rounded text-sm"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm"
                   />
                 </div>
               </div>
@@ -1028,7 +1028,7 @@ export default function AdminDashboard() {
                           type="text"
                           value={dish.name}
                           onChange={(e) => handleDishChange(idx, "name", e.target.value)}
-                          className="luxury-input w-full px-3 py-2 rounded text-xs font-semibold"
+                          className="admin-input w-full px-3 py-2 rounded text-xs font-semibold"
                         />
                       </div>
 
@@ -1038,7 +1038,7 @@ export default function AdminDashboard() {
                           type="text"
                           value={dish.price}
                           onChange={(e) => handleDishChange(idx, "price", e.target.value)}
-                          className="luxury-input w-full px-3 py-2 rounded text-xs text-[#cba864] font-bold"
+                          className="admin-input w-full px-3 py-2 rounded text-xs text-[#cba864] font-bold"
                         />
                       </div>
 
@@ -1049,7 +1049,7 @@ export default function AdminDashboard() {
                           placeholder="vd: Khai vị, Món chính, Signature"
                           value={dish.tag}
                           onChange={(e) => handleDishChange(idx, "tag", e.target.value)}
-                          className="luxury-input w-full px-3 py-2 rounded text-xs"
+                          className="admin-input w-full px-3 py-2 rounded text-xs"
                         />
                       </div>
                     </div>
@@ -1062,7 +1062,7 @@ export default function AdminDashboard() {
                           placeholder="vd: Chef's Special, Tươi sống 100%"
                           value={dish.highlight}
                           onChange={(e) => handleDishChange(idx, "highlight", e.target.value)}
-                          className="luxury-input w-full px-3 py-2 rounded text-xs"
+                          className="admin-input w-full px-3 py-2 rounded text-xs"
                         />
                       </div>
 
@@ -1072,7 +1072,7 @@ export default function AdminDashboard() {
                           type="text"
                           value={dish.image}
                           onChange={(e) => handleDishChange(idx, "image", e.target.value)}
-                          className="luxury-input w-full px-3 py-2 rounded text-xs font-mono"
+                          className="admin-input w-full px-3 py-2 rounded text-xs font-mono"
                         />
                       </div>
                     </div>
@@ -1083,7 +1083,7 @@ export default function AdminDashboard() {
                         rows={2}
                         value={dish.description}
                         onChange={(e) => handleDishChange(idx, "description", e.target.value)}
-                        className="luxury-input w-full px-3 py-2 rounded text-xs leading-relaxed"
+                        className="admin-input w-full px-3 py-2 rounded text-xs leading-relaxed"
                       />
                     </div>
                   </div>
@@ -1094,7 +1094,7 @@ export default function AdminDashboard() {
 
           {/* TAB 6: NIGHTLIFE */}
           {activeTab === "nightlife" && (
-            <div className="space-y-6 animate-in fade-in duration-200">
+            <div className="space-y-6">
               <div className="border-b border-white/10 pb-4">
                 <h2 className="font-serif text-xl sm:text-2xl text-white">Về Đêm & Cầu Rồng (Nightlife)</h2>
                 <p className="text-xs text-slate-300 mt-1">Nội dung trải nghiệm ngắm Cầu Rồng phun lửa, pháo hoa và cocktail.</p>
@@ -1107,7 +1107,7 @@ export default function AdminDashboard() {
                     rows={2}
                     value={formData.nightlife?.headline || ""}
                     onChange={(e) => handleFieldChange("nightlife", "headline", e.target.value)}
-                    className="luxury-input w-full px-3.5 py-2.5 rounded text-sm font-serif"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm font-serif"
                   />
                 </div>
 
@@ -1117,7 +1117,7 @@ export default function AdminDashboard() {
                     rows={2}
                     value={formData.nightlife?.description || ""}
                     onChange={(e) => handleFieldChange("nightlife", "description", e.target.value)}
-                    className="luxury-input w-full px-3.5 py-2.5 rounded text-sm"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm"
                   />
                 </div>
 
@@ -1136,7 +1136,7 @@ export default function AdminDashboard() {
                               items[idx] = { ...items[idx], time: e.target.value };
                               handleFieldChange("nightlife", "items", items);
                             }}
-                            className="luxury-input w-full px-3 py-1.5 rounded text-xs text-[#cba864] font-bold"
+                            className="admin-input w-full px-3 py-1.5 rounded text-xs text-[#cba864] font-bold"
                           />
                         </div>
                         <div>
@@ -1149,7 +1149,7 @@ export default function AdminDashboard() {
                               items[idx] = { ...items[idx], title: e.target.value };
                               handleFieldChange("nightlife", "items", items);
                             }}
-                            className="luxury-input w-full px-3 py-1.5 rounded text-xs font-semibold"
+                            className="admin-input w-full px-3 py-1.5 rounded text-xs font-semibold"
                           />
                         </div>
                       </div>
@@ -1164,7 +1164,7 @@ export default function AdminDashboard() {
                             items[idx] = { ...items[idx], description: e.target.value };
                             handleFieldChange("nightlife", "items", items);
                           }}
-                          className="luxury-input w-full px-3 py-1.5 rounded text-xs"
+                          className="admin-input w-full px-3 py-1.5 rounded text-xs"
                         />
                       </div>
                     </div>
@@ -1176,7 +1176,7 @@ export default function AdminDashboard() {
 
           {/* TAB 7: EVENTS */}
           {activeTab === "events" && (
-            <div className="space-y-6 animate-in fade-in duration-200">
+            <div className="space-y-6">
               <div className="border-b border-white/10 pb-4">
                 <h2 className="font-serif text-xl sm:text-2xl text-white">Tiệc Riêng & Sự Kiện (Events)</h2>
                 <p className="text-xs text-slate-300 mt-1">3 gói sự kiện: Tiệc lãng mạn, Tiệc doanh nghiệp và Set menu đoàn.</p>
@@ -1189,7 +1189,7 @@ export default function AdminDashboard() {
                     rows={2}
                     value={formData.events?.headline || ""}
                     onChange={(e) => handleFieldChange("events", "headline", e.target.value)}
-                    className="luxury-input w-full px-3.5 py-2.5 rounded text-sm font-serif"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm font-serif"
                   />
                 </div>
 
@@ -1207,7 +1207,7 @@ export default function AdminDashboard() {
                               cards[idx] = { ...cards[idx], title: e.target.value };
                               handleFieldChange("events", "cards", cards);
                             }}
-                            className="luxury-input w-full px-3 py-1.5 rounded text-xs font-semibold"
+                            className="admin-input w-full px-3 py-1.5 rounded text-xs font-semibold"
                           />
                         </div>
                         <div>
@@ -1220,7 +1220,7 @@ export default function AdminDashboard() {
                               cards[idx] = { ...cards[idx], cta: e.target.value };
                               handleFieldChange("events", "cards", cards);
                             }}
-                            className="luxury-input w-full px-3 py-1.5 rounded text-xs text-[#cba864]"
+                            className="admin-input w-full px-3 py-1.5 rounded text-xs text-[#cba864]"
                           />
                         </div>
                       </div>
@@ -1235,7 +1235,7 @@ export default function AdminDashboard() {
                             cards[idx] = { ...cards[idx], description: e.target.value };
                             handleFieldChange("events", "cards", cards);
                           }}
-                          className="luxury-input w-full px-3 py-1.5 rounded text-xs"
+                          className="admin-input w-full px-3 py-1.5 rounded text-xs"
                         />
                       </div>
                     </div>
@@ -1247,7 +1247,7 @@ export default function AdminDashboard() {
 
           {/* TAB 8: REVIEWS */}
           {activeTab === "reviews" && (
-            <div className="space-y-6 animate-in fade-in duration-200">
+            <div className="space-y-6">
               <div className="flex items-center justify-between border-b border-white/10 pb-4">
                 <div>
                   <h2 className="font-serif text-xl sm:text-2xl text-white">Đánh Giá Thực Khách (Reviews)</h2>
@@ -1256,7 +1256,7 @@ export default function AdminDashboard() {
                 <button
                   type="button"
                   onClick={handleAddReview}
-                  className="btn-gold px-4 py-2 rounded text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
+                  className="admin-btn-gold px-4 py-2 rounded text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
                 >
                   <span>+ Thêm đánh giá</span>
                 </button>
@@ -1283,7 +1283,7 @@ export default function AdminDashboard() {
                           type="text"
                           value={rev.author}
                           onChange={(e) => handleReviewChange(idx, "author", e.target.value)}
-                          className="luxury-input w-full px-3 py-1.5 rounded text-xs font-semibold"
+                          className="admin-input w-full px-3 py-1.5 rounded text-xs font-semibold"
                         />
                       </div>
                       <div>
@@ -1292,7 +1292,7 @@ export default function AdminDashboard() {
                           type="text"
                           value={rev.role}
                           onChange={(e) => handleReviewChange(idx, "role", e.target.value)}
-                          className="luxury-input w-full px-3 py-1.5 rounded text-xs"
+                          className="admin-input w-full px-3 py-1.5 rounded text-xs"
                         />
                       </div>
                       <div>
@@ -1303,7 +1303,7 @@ export default function AdminDashboard() {
                           max={5}
                           value={rev.rating || 5}
                           onChange={(e) => handleReviewChange(idx, "rating", parseInt(e.target.value) || 5)}
-                          className="luxury-input w-full px-3 py-1.5 rounded text-xs text-[#cba864] font-bold"
+                          className="admin-input w-full px-3 py-1.5 rounded text-xs text-[#cba864] font-bold"
                         />
                       </div>
                     </div>
@@ -1314,7 +1314,7 @@ export default function AdminDashboard() {
                         rows={3}
                         value={rev.quote}
                         onChange={(e) => handleReviewChange(idx, "quote", e.target.value)}
-                        className="luxury-input w-full px-3 py-2 rounded text-xs leading-relaxed italic"
+                        className="admin-input w-full px-3 py-2 rounded text-xs leading-relaxed italic"
                       />
                     </div>
                   </div>
@@ -1325,7 +1325,7 @@ export default function AdminDashboard() {
 
           {/* TAB 9: FAQS */}
           {activeTab === "faqs" && (
-            <div className="space-y-6 animate-in fade-in duration-200">
+            <div className="space-y-6">
               <div className="flex items-center justify-between border-b border-white/10 pb-4">
                 <div>
                   <h2 className="font-serif text-xl sm:text-2xl text-white">Câu Hỏi Thường Gặp (FAQ)</h2>
@@ -1334,7 +1334,7 @@ export default function AdminDashboard() {
                 <button
                   type="button"
                   onClick={handleAddFaq}
-                  className="btn-gold px-4 py-2 rounded text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
+                  className="admin-btn-gold px-4 py-2 rounded text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
                 >
                   <span>+ Thêm câu hỏi</span>
                 </button>
@@ -1360,7 +1360,7 @@ export default function AdminDashboard() {
                         type="text"
                         value={faq.q}
                         onChange={(e) => handleFaqChange(idx, "q", e.target.value)}
-                        className="luxury-input w-full px-3 py-2 rounded text-xs font-semibold text-white"
+                        className="admin-input w-full px-3 py-2 rounded text-xs font-semibold text-white"
                       />
                     </div>
 
@@ -1370,7 +1370,7 @@ export default function AdminDashboard() {
                         rows={3}
                         value={faq.a}
                         onChange={(e) => handleFaqChange(idx, "a", e.target.value)}
-                        className="luxury-input w-full px-3 py-2 rounded text-xs leading-relaxed"
+                        className="admin-input w-full px-3 py-2 rounded text-xs leading-relaxed"
                       />
                     </div>
                   </div>
@@ -1381,7 +1381,7 @@ export default function AdminDashboard() {
 
           {/* TAB 10: BOOKING & FOOTER */}
           {activeTab === "booking" && (
-            <div className="space-y-6 animate-in fade-in duration-200">
+            <div className="space-y-6">
               <div className="border-b border-white/10 pb-4">
                 <h2 className="font-serif text-xl sm:text-2xl text-white">Đặt Bàn & Chân Trang (Footer)</h2>
                 <p className="text-xs text-slate-300 mt-1">Cấu hình danh sách số lượng khách, loại tiệc và thông tin bản quyền.</p>
@@ -1394,7 +1394,7 @@ export default function AdminDashboard() {
                     rows={2}
                     value={formData.footer?.about || ""}
                     onChange={(e) => handleFieldChange("footer", "about", e.target.value)}
-                    className="luxury-input w-full px-3.5 py-2.5 rounded text-sm leading-relaxed"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm leading-relaxed"
                   />
                 </div>
 
@@ -1405,7 +1405,7 @@ export default function AdminDashboard() {
                       type="text"
                       value={formData.footer?.copyright || ""}
                       onChange={(e) => handleFieldChange("footer", "copyright", e.target.value)}
-                      className="luxury-input w-full px-3.5 py-2.5 rounded text-sm"
+                      className="admin-input w-full px-3.5 py-2.5 rounded text-sm"
                     />
                   </div>
                   <div>
@@ -1414,7 +1414,7 @@ export default function AdminDashboard() {
                       type="text"
                       value={formData.footer?.subtext || ""}
                       onChange={(e) => handleFieldChange("footer", "subtext", e.target.value)}
-                      className="luxury-input w-full px-3.5 py-2.5 rounded text-sm"
+                      className="admin-input w-full px-3.5 py-2.5 rounded text-sm"
                     />
                   </div>
                 </div>
@@ -1428,7 +1428,7 @@ export default function AdminDashboard() {
                       const lines = e.target.value.split("\n").filter((l) => l.trim().length > 0);
                       handleFieldChange("booking", "guestOptions", lines);
                     }}
-                    className="luxury-input w-full px-3.5 py-2.5 rounded text-xs font-mono leading-relaxed"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-xs font-mono leading-relaxed"
                   />
                 </div>
 
@@ -1441,7 +1441,7 @@ export default function AdminDashboard() {
                       const lines = e.target.value.split("\n").filter((l) => l.trim().length > 0);
                       handleFieldChange("booking", "partyTypes", lines);
                     }}
-                    className="luxury-input w-full px-3.5 py-2.5 rounded text-xs font-mono leading-relaxed"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-xs font-mono leading-relaxed"
                   />
                 </div>
               </div>
@@ -1450,7 +1450,7 @@ export default function AdminDashboard() {
 
           {/* TAB 11: SETTINGS & BACKUP */}
           {activeTab === "settings" && (
-            <div className="space-y-8 animate-in fade-in duration-200">
+            <div className="space-y-8">
               <div className="border-b border-white/10 pb-4">
                 <h2 className="font-serif text-xl sm:text-2xl text-white">Cài Đặt Hệ Thống & Sao Lưu</h2>
                 <p className="text-xs text-slate-300 mt-1">Đổi mật khẩu truy cập admin, tải file JSON hoặc khôi phục dữ liệu.</p>
@@ -1467,7 +1467,7 @@ export default function AdminDashboard() {
                       required
                       value={adminPassChange.current}
                       onChange={(e) => setAdminPassChange((p) => ({ ...p, current: e.target.value }))}
-                      className="luxury-input w-full px-3 py-2 rounded text-xs"
+                      className="admin-input w-full px-3 py-2 rounded text-xs"
                     />
                   </div>
                   <div>
@@ -1477,7 +1477,7 @@ export default function AdminDashboard() {
                       required
                       value={adminPassChange.newPass}
                       onChange={(e) => setAdminPassChange((p) => ({ ...p, newPass: e.target.value }))}
-                      className="luxury-input w-full px-3 py-2 rounded text-xs"
+                      className="admin-input w-full px-3 py-2 rounded text-xs"
                     />
                   </div>
                   <div>
@@ -1487,12 +1487,12 @@ export default function AdminDashboard() {
                       required
                       value={adminPassChange.confirm}
                       onChange={(e) => setAdminPassChange((p) => ({ ...p, confirm: e.target.value }))}
-                      className="luxury-input w-full px-3 py-2 rounded text-xs"
+                      className="admin-input w-full px-3 py-2 rounded text-xs"
                     />
                   </div>
                   <button
                     type="submit"
-                    className="btn-gold px-4 py-2 rounded text-xs font-bold uppercase tracking-wider cursor-pointer"
+                    className="admin-btn-gold px-4 py-2 rounded text-xs font-bold uppercase tracking-wider cursor-pointer"
                   >
                     Cập Nhật Mật Khẩu
                   </button>
@@ -1511,12 +1511,12 @@ export default function AdminDashboard() {
                   <button
                     type="button"
                     onClick={exportJson}
-                    className="btn-gold px-4 py-2.5 rounded text-xs font-bold uppercase tracking-wider cursor-pointer"
+                    className="admin-btn-gold px-4 py-2.5 rounded text-xs font-bold uppercase tracking-wider cursor-pointer"
                   >
                     Tải file content.json về máy
                   </button>
 
-                  <label className="btn-glass px-4 py-2.5 rounded text-xs font-medium cursor-pointer hover:border-[#cba864]">
+                  <label className="admin-btn-secondary px-4 py-2.5 rounded text-xs font-medium cursor-pointer hover:border-[#cba864]">
                     Nhập dữ liệu từ file JSON
                     <input
                       type="file"
@@ -1560,7 +1560,7 @@ export default function AdminDashboard() {
               type="button"
               onClick={handleSave}
               disabled={saveStatus.state === "saving"}
-              className="btn-gold px-8 py-3.5 rounded text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-xl shadow-[#cba864]/25 cursor-pointer"
+              className="admin-btn-gold px-8 py-3.5 rounded text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-xl shadow-[#cba864]/25 cursor-pointer"
             >
               <span>{saveStatus.state === "saving" ? "Đang lưu lên máy chủ..." : "LƯU TẤT CẢ THAY ĐỔI"}</span>
             </button>

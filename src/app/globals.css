@@ -150,6 +150,69 @@ body {
   color: #64748b;
 }
 
+/* ==========================================================================
+   ADMIN CMS - High-Performance, Zero-Jitter, Zero-Transform UI System
+   Eliminates all hover translateY, backdrop-filter blurs, and unnecessary repaints
+   ========================================================================== */
+
+.admin-card {
+  background-color: #081424;
+  border: 1px solid rgba(203, 168, 100, 0.22);
+}
+
+.admin-input {
+  background-color: #050d18;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #f8fafc;
+  outline: none;
+  transition: border-color 0.12s ease;
+}
+
+.admin-input:focus {
+  border-color: #cba864;
+  box-shadow: 0 0 0 1px #cba864;
+  background-color: #071220;
+}
+
+.admin-input::placeholder {
+  color: #64748b;
+}
+
+/* Stable, fast buttons for admin without hover translateY or shimmer loops */
+.admin-btn-gold {
+  background-color: #cba864;
+  color: #060e18;
+  font-weight: 700;
+  border: 1px solid #cba864;
+  transition: background-color 0.12s ease;
+}
+
+.admin-btn-gold:hover {
+  background-color: #dfbf78;
+}
+
+.admin-btn-gold:active {
+  background-color: #b58d44;
+}
+
+.admin-btn-secondary {
+  background-color: #0c1a2c;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #e2e8f0;
+  transition: background-color 0.12s ease, border-color 0.12s ease;
+}
+
+.admin-btn-secondary:hover {
+  background-color: #12253d;
+  border-color: rgba(203, 168, 100, 0.45);
+  color: #ffffff;
+}
+
+.admin-btn-secondary:active {
+  background-color: #091524;
+}
+
+
 /* Sub-kicker Line with symmetrical luxury lines */
 .kicker-line {
   display: inline-flex;
