@@ -239,9 +239,9 @@ export default function AdminDashboard() {
       if (typeof contentStr === "string") {
         const res = importJson(contentStr);
         if (res.success) {
-          alert("🎉 Đã nhập nội dung từ file JSON thành công!");
+          alert("Đã nhập nội dung từ file JSON thành công!");
         } else {
-          alert("❌ Lỗi: " + res.error);
+          alert("Lỗi: " + res.error);
         }
       }
     };
@@ -253,15 +253,15 @@ export default function AdminDashboard() {
     e.preventDefault();
     const currentStoredPass = formData?.admin?.passwordHash || "theview@2026";
     if (adminPassChange.current !== currentStoredPass) {
-      alert("❌ Mật khẩu hiện tại không đúng!");
+      alert("Mật khẩu hiện tại không đúng!");
       return;
     }
     if (!adminPassChange.newPass || adminPassChange.newPass.length < 6) {
-      alert("❌ Mật khẩu mới phải có ít nhất 6 ký tự!");
+      alert("Mật khẩu mới phải có ít nhất 6 ký tự!");
       return;
     }
     if (adminPassChange.newPass !== adminPassChange.confirm) {
-      alert("❌ Xác nhận mật khẩu mới không khớp!");
+      alert("Xác nhận mật khẩu mới không khớp!");
       return;
     }
 
@@ -272,7 +272,7 @@ export default function AdminDashboard() {
         passwordHash: adminPassChange.newPass,
       },
     }));
-    alert("✅ Đã đổi mật khẩu admin thành công! Hãy bấm 'LƯU TẤT CẢ THAY ĐỔI' phía trên để áp dụng.");
+    alert("Đã đổi mật khẩu admin thành công! Hãy bấm 'LƯU TẤT CẢ THAY ĐỔI' phía trên để áp dụng.");
     setAdminPassChange({ current: "", newPass: "", confirm: "" });
   };
 
@@ -356,8 +356,8 @@ export default function AdminDashboard() {
           {saveStatus.state === "saving" && (
             <span className="w-3.5 h-3.5 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
           )}
-          {saveStatus.state === "success" && <span>✓</span>}
-          {saveStatus.state === "error" && <span>⚠️</span>}
+          {saveStatus.state === "success" && <span className="font-bold">✓</span>}
+          {saveStatus.state === "error" && <span className="font-bold">!</span>}
           <span>{saveStatus.message}</span>
         </div>
       )}
@@ -374,8 +374,8 @@ export default function AdminDashboard() {
                 className="object-contain object-left"
               />
             </div>
-            <span className="text-[10px] bg-[#cba864]/20 text-[#f3e2b8] px-2 py-0.5 rounded uppercase tracking-wider font-semibold border border-[#cba864]/30 hidden sm:inline-block">
-              CMS Panel
+            <span className="text-[10px] bg-[#cba864]/15 text-[#f3e2b8] px-2.5 py-0.5 rounded tracking-widest font-semibold border border-[#cba864]/30 uppercase hidden sm:inline-block">
+              Quản Trị CMS
             </span>
           </Link>
         </div>
@@ -386,18 +386,16 @@ export default function AdminDashboard() {
             target="_blank"
             className="btn-glass px-3 sm:px-4 py-2 rounded text-xs font-medium flex items-center gap-1.5"
           >
-            <span>👁️</span>
-            <span className="hidden sm:inline">Xem website</span>
+            <span>Xem website ↗</span>
           </Link>
 
           <button
             type="button"
             onClick={exportJson}
-            className="btn-glass px-3 sm:px-4 py-2 rounded text-xs font-medium flex items-center gap-1.5"
+            className="btn-glass px-3 sm:px-4 py-2 rounded text-xs font-medium flex items-center gap-1.5 cursor-pointer"
             title="Tải file content.json về máy tính để sao lưu"
           >
-            <span>📥</span>
-            <span className="hidden sm:inline">Tải JSON</span>
+            <span>Tải file JSON</span>
           </button>
 
           <button
@@ -406,17 +404,16 @@ export default function AdminDashboard() {
             disabled={saveStatus.state === "saving"}
             className="btn-gold px-4 sm:px-6 py-2 rounded text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-[#cba864]/20 cursor-pointer"
           >
-            <span>💾</span>
             <span>{saveStatus.state === "saving" ? "Đang lưu..." : "Lưu tất cả"}</span>
           </button>
 
           <button
             type="button"
             onClick={handleLogout}
-            className="p-2 text-slate-400 hover:text-rose-400 text-xs rounded transition-colors"
+            className="px-3 py-1.5 text-slate-400 hover:text-rose-400 text-xs rounded border border-white/10 hover:border-rose-500/30 transition-colors cursor-pointer"
             title="Đăng xuất"
           >
-            🚪
+            Đăng xuất
           </button>
         </div>
       </header>
@@ -426,8 +423,8 @@ export default function AdminDashboard() {
         {/* SIDEBAR TABS */}
         <div className="lg:col-span-3 space-y-1.5 sticky top-24">
           <div className="p-3 bg-[#0a1728] border border-[#cba864]/20 rounded-xl mb-4">
-            <span className="text-[11px] uppercase tracking-wider text-[#cba864] font-semibold block mb-1">
-              File Dữ Liệu:
+            <span className="text-[10px] tracking-widest text-[#cba864] font-semibold uppercase block mb-1">
+              File Dữ Liệu
             </span>
             <code className="text-xs text-emerald-400 block break-all font-mono">
               /content.json
@@ -438,33 +435,41 @@ export default function AdminDashboard() {
           </div>
 
           {[
-            { id: "brand", label: "1. Thương hiệu & Hotline", icon: "🏷️" },
-            { id: "hero", label: "2. Hero Banner", icon: "⚓" },
-            { id: "moments", label: "3. 3 Thời khắc đón khách", icon: "🌅" },
-            { id: "experience", label: "4. Không gian & Khu vực", icon: "🏛️" },
-            { id: "menu", label: "5. Thực đơn & Món ăn", icon: "🍣" },
-            { id: "nightlife", label: "6. Về đêm & Cầu Rồng", icon: "🎆" },
-            { id: "events", label: "7. Tiệc riêng & Sự kiện", icon: "🥂" },
-            { id: "reviews", label: "8. Đánh giá thực khách", icon: "⭐" },
-            { id: "faqs", label: "9. Câu hỏi thường gặp", icon: "❓" },
-            { id: "booking", label: "10. Đặt bàn & Chân trang", icon: "📋" },
-            { id: "settings", label: "11. Cài đặt & Dữ liệu", icon: "⚙️" },
+            { id: "brand", label: "Thương hiệu & Hotline", num: "01" },
+            { id: "hero", label: "Hero Banner", num: "02" },
+            { id: "moments", label: "3 Thời khắc đón khách", num: "03" },
+            { id: "experience", label: "Không gian & Khu vực", num: "04" },
+            { id: "menu", label: "Thực đơn & Món ăn", num: "05" },
+            { id: "nightlife", label: "Về đêm & Cầu Rồng", num: "06" },
+            { id: "events", label: "Tiệc riêng & Sự kiện", num: "07" },
+            { id: "reviews", label: "Đánh giá thực khách", num: "08" },
+            { id: "faqs", label: "Câu hỏi thường gặp", num: "09" },
+            { id: "booking", label: "Đặt bàn & Chân trang", num: "10" },
+            { id: "settings", label: "Cài đặt & Dữ liệu", num: "11" },
           ].map((tab) => (
             <button
               key={tab.id}
               type="button"
               onClick={() => setActiveTab(tab.id)}
-              className={`w-full text-left px-4 py-3 rounded-lg text-xs font-medium transition-all duration-200 flex items-center justify-between cursor-pointer ${
+              className={`w-full text-left px-3.5 py-2.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center justify-between cursor-pointer ${
                 activeTab === tab.id
                   ? "bg-[#cba864] text-[#060e18] font-bold shadow-md shadow-[#cba864]/20"
                   : "bg-[#091524] text-slate-300 hover:bg-[#0f2137] hover:text-white border border-white/5"
               }`}
             >
               <span className="flex items-center gap-2.5">
-                <span>{tab.icon}</span>
+                <span
+                  className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${
+                    activeTab === tab.id
+                      ? "bg-[#060e18]/20 text-[#060e18] font-bold"
+                      : "bg-white/5 text-[#cba864]"
+                  }`}
+                >
+                  {tab.num}
+                </span>
                 <span>{tab.label}</span>
               </span>
-              <span>→</span>
+              <span className="text-[11px] opacity-40 font-mono">→</span>
             </button>
           ))}
         </div>
@@ -1010,9 +1015,9 @@ export default function AdminDashboard() {
                       <button
                         type="button"
                         onClick={() => handleDeleteDish(idx)}
-                        className="text-xs text-rose-400 hover:text-rose-300 px-2 py-1 rounded bg-rose-950/40 border border-rose-800/40 cursor-pointer"
+                        className="text-xs text-rose-400 hover:text-rose-300 px-2.5 py-1 rounded bg-rose-950/40 border border-rose-800/40 cursor-pointer"
                       >
-                        ✕ Xóa món
+                        Xóa món
                       </button>
                     </div>
 
@@ -1265,9 +1270,9 @@ export default function AdminDashboard() {
                       <button
                         type="button"
                         onClick={() => handleDeleteReview(idx)}
-                        className="text-xs text-rose-400 hover:text-rose-300 px-2 py-1 rounded bg-rose-950/40 border border-rose-800/40 cursor-pointer"
+                        className="text-xs text-rose-400 hover:text-rose-300 px-2.5 py-1 rounded bg-rose-950/40 border border-rose-800/40 cursor-pointer"
                       >
-                        ✕ Xóa
+                        Xóa
                       </button>
                     </div>
 
@@ -1343,9 +1348,9 @@ export default function AdminDashboard() {
                       <button
                         type="button"
                         onClick={() => handleDeleteFaq(idx)}
-                        className="text-xs text-rose-400 hover:text-rose-300 px-2 py-1 rounded bg-rose-950/40 border border-rose-800/40 cursor-pointer"
+                        className="text-xs text-rose-400 hover:text-rose-300 px-2.5 py-1 rounded bg-rose-950/40 border border-rose-800/40 cursor-pointer"
                       >
-                        ✕ Xóa
+                        Xóa
                       </button>
                     </div>
 
@@ -1453,7 +1458,7 @@ export default function AdminDashboard() {
 
               {/* CHANGE PASSWORD */}
               <div className="p-5 bg-[#091728] rounded-xl border border-white/10 space-y-4">
-                <h3 className="font-serif text-base text-[#cba864] font-medium">🔒 Đổi Mật Khẩu Quản Trị</h3>
+                <h3 className="font-serif text-base text-[#cba864] font-medium">Đổi Mật Khẩu Quản Trị</h3>
                 <form onSubmit={handleChangePassword} className="space-y-3 max-w-md">
                   <div>
                     <label className="text-xs text-slate-300 block mb-1">Mật khẩu hiện tại</label>
@@ -1496,7 +1501,7 @@ export default function AdminDashboard() {
 
               {/* BACKUP & RESTORE JSON */}
               <div className="p-5 bg-[#091728] rounded-xl border border-white/10 space-y-4">
-                <h3 className="font-serif text-base text-[#cba864] font-medium">📦 Sao Lưu & Khôi Phục File JSON</h3>
+                <h3 className="font-serif text-base text-[#cba864] font-medium">Sao Lưu & Khôi Phục File JSON</h3>
                 <p className="text-xs text-slate-300 leading-relaxed">
                   Toàn bộ dữ liệu cài đặt trang web được lưu tại file <code className="text-emerald-400 font-mono">/content.json</code>.
                   Bạn có thể tải file này về máy tính để lưu trữ dự phòng, hoặc upload một file JSON khác để thay đổi toàn bộ website trong 1 giây.
@@ -1506,15 +1511,13 @@ export default function AdminDashboard() {
                   <button
                     type="button"
                     onClick={exportJson}
-                    className="btn-gold px-4 py-2.5 rounded text-xs font-bold uppercase tracking-wider flex items-center gap-2 cursor-pointer"
+                    className="btn-gold px-4 py-2.5 rounded text-xs font-bold uppercase tracking-wider cursor-pointer"
                   >
-                    <span>📥</span>
-                    <span>Tải file content.json về máy</span>
+                    Tải file content.json về máy
                   </button>
 
-                  <label className="btn-glass px-4 py-2.5 rounded text-xs font-medium flex items-center gap-2 cursor-pointer hover:border-[#cba864]">
-                    <span>📤</span>
-                    <span>Nhập dữ liệu từ file JSON</span>
+                  <label className="btn-glass px-4 py-2.5 rounded text-xs font-medium cursor-pointer hover:border-[#cba864]">
+                    Nhập dữ liệu từ file JSON
                     <input
                       type="file"
                       accept=".json"
@@ -1527,7 +1530,7 @@ export default function AdminDashboard() {
 
               {/* FACTORY RESET */}
               <div className="p-5 bg-rose-950/20 rounded-xl border border-rose-800/30 space-y-3">
-                <h3 className="font-serif text-base text-rose-400 font-medium">⚠️ Khôi Phục Dữ Liệu Gốc (Factory Reset)</h3>
+                <h3 className="font-serif text-base text-rose-400 font-medium">Khôi Phục Dữ Liệu Gốc (Factory Reset)</h3>
                 <p className="text-xs text-slate-400 leading-relaxed">
                   Thao tác này sẽ xóa tất cả các thay đổi tùy chỉnh và đưa nội dung website quay về bản thiết kế gốc ban đầu.
                 </p>
@@ -1559,7 +1562,6 @@ export default function AdminDashboard() {
               disabled={saveStatus.state === "saving"}
               className="btn-gold px-8 py-3.5 rounded text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-xl shadow-[#cba864]/25 cursor-pointer"
             >
-              <span>💾</span>
               <span>{saveStatus.state === "saving" ? "Đang lưu lên máy chủ..." : "LƯU TẤT CẢ THAY ĐỔI"}</span>
             </button>
           </div>
