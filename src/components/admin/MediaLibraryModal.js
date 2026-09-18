@@ -31,25 +31,49 @@ export default function MediaLibraryModal({
   const [uploadError, setUploadError] = useState("");
   const fileInputRef = useRef(null);
 
-  // Fetch all images from API
+  // Fetch all images from API, dev server, and local storage
   const fetchImages = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch("/api/upload.php?action=list");
-      if (res.ok) {
-        const data = await res.json();
-        if (data.success && Array.isArray(data.files) && data.files.length > 0) {
-          // Merge API images with default list avoiding duplicates by url
-          const map = new Map();
-          // Put API files first
-          data.files.forEach((f) => map.set(f.url, f));
-          // Put default images if not in map
-          DEFAULT_RESTAURANT_IMAGES.forEach((d) => {
-            if (!map.has(d.url)) map.set(d.url, d);
-          });
-          setImages(Array.from(map.values()));
+      const map = new Map();
+
+      // 1. Try cPanel upload.php
+      try {
+        const res = await fetch("/api/upload.php?action=list");
+        const contentType = res.headers.get("content-type") || "";
+        if (res.ok && contentType.includes("json")) {
+          const data = await res.json();
+          if (data.success && Array.isArray(data.files)) {
+            data.files.forEach((f) => map.set(f.url, f));
+          }
         }
-      }
+      } catch (e) {}
+
+      // 2. Try Local dev upload server (port 3002)
+      try {
+        const resDev = await fetch("http://localhost:3002/list");
+        if (resDev.ok) {
+          const dataDev = await resDev.json();
+          if (dataDev.success && Array.isArray(dataDev.files)) {
+            dataDev.files.forEach((f) => map.set(f.url, f));
+          }
+        }
+      } catch (e) {}
+
+      // 3. Merge localStorage uploads
+      try {
+        const localUploads = JSON.parse(localStorage.getItem("theview_local_uploads") || "[]");
+        localUploads.forEach((f) => {
+          if (!map.has(f.url)) map.set(f.url, f);
+        });
+      } catch (e) {}
+
+      // 4. Merge default restaurant images
+      DEFAULT_RESTAURANT_IMAGES.forEach((d) => {
+        if (!map.has(d.url)) map.set(d.url, d);
+      });
+
+      setImages(Array.from(map.values()));
     } catch (err) {
       console.error("Fetch media library error:", err);
     } finally {
