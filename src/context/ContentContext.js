@@ -73,18 +73,29 @@ export function ContentProvider({ children }) {
     });
   };
 
-  // Save changes to PHP endpoint on cPanel (with fallback to localStorage)
-  const saveToServer = async (adminPassword = "") => {
+  // Save changes to PHP endpoint on cPanel (with fallback to dev upload server & localStorage)
+  const saveToServer = async (newContentOrPassword = null, maybePassword = "") => {
+    let newContent = null;
+    let adminPassword = "";
+
+    if (typeof newContentOrPassword === "object" && newContentOrPassword !== null) {
+      newContent = newContentOrPassword;
+      adminPassword = maybePassword || "";
+    } else if (typeof newContentOrPassword === "string") {
+      adminPassword = newContentOrPassword;
+    }
+
+    const baseData = newContent || content;
     const timestamp = new Date().toISOString();
     const updatedContent = {
-      ...content,
+      ...baseData,
       admin: {
-        ...(content.admin || {}),
+        ...(baseData.admin || {}),
         updatedAt: timestamp,
       },
     };
 
-    // Update state & local storage immediately
+    // 1. Update React state & localStorage immediately
     setContent(updatedContent);
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedContent));
@@ -95,6 +106,7 @@ export function ContentProvider({ children }) {
       _adminPassword: adminPassword,
     };
 
+    // 2. Try PHP cPanel endpoint
     try {
       const res = await fetch("/api/save-content.php", {
         method: "POST",
@@ -105,28 +117,50 @@ export function ContentProvider({ children }) {
         body: JSON.stringify(payload),
       });
 
-      if (res.ok) {
+      const contentType = res.headers.get("content-type") || "";
+      if (res.ok && contentType.includes("json")) {
         const data = await res.json();
         return {
           success: true,
           mode: "server",
           message: data.message || "Đã lưu thay đổi thành công!",
-        };
-      } else {
-        // Fallback for dev mode (e.g. 405 on Next.js dev server)
-        return {
-          success: true,
-          mode: "local_only",
-          message: "Đã lưu thay đổi thành công!",
+          updatedContent,
         };
       }
     } catch (err) {
-      return {
-        success: true,
-        mode: "local_only",
-        message: "Đã lưu thay đổi thành công!",
-      };
+      // Dev mode or PHP not running
     }
+
+    // 3. Try dev upload/content server (port 3002) to persist to disk in local development
+    try {
+      const devRes = await fetch("http://localhost:3002/save-content", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Admin-Password": adminPassword,
+        },
+        body: JSON.stringify(payload),
+      });
+      if (devRes.ok) {
+        const devData = await devRes.json();
+        return {
+          success: true,
+          mode: "dev_server",
+          message: devData.message || "Đã lưu thay đổi thành công!",
+          updatedContent,
+        };
+      }
+    } catch (devErr) {
+      // Dev server on port 3002 not reachable
+    }
+
+    // 4. Client-side local storage fallback
+    return {
+      success: true,
+      mode: "local_only",
+      message: "Đã lưu thay đổi thành công!",
+      updatedContent,
+    };
   };
 
   // Reset to factory default data
@@ -143,6 +177,7 @@ export function ContentProvider({ children }) {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(resetData));
     } catch (e) {}
+    return resetData;
   };
 
   // Download content.json file
@@ -169,7 +204,7 @@ export function ContentProvider({ children }) {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
       } catch (e) {}
-      return { success: true };
+      return { success: true, data: parsed };
     } catch (err) {
       return { success: false, error: err.message };
     }

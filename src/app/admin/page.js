@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useContent } from "@/context/ContentContext";
 import Link from "next/link";
 import Image from "next/image";
@@ -68,12 +68,17 @@ export default function AdminDashboard() {
     setTimeout(() => setGalleryUploadStatus(""), 4000);
   };
 
-  // Sync draft whenever context finishes initial loading
+  const isInitializedRef = useRef(false);
+
+  // Sync draft on initial loading only
   useEffect(() => {
-    if (content) {
+    if (!isInitializedRef.current && content) {
       setFormData(content);
+      if (isLoaded) {
+        isInitializedRef.current = true;
+      }
     }
-  }, [content]);
+  }, [content, isLoaded]);
 
   // Check login session
   useEffect(() => {
@@ -130,12 +135,12 @@ export default function AdminDashboard() {
     setSaveStatus({ state: "saving", message: "Đang lưu lên máy chủ..." });
     const currentPass = formData?.admin?.passwordHash || "theview@2026";
 
-    // 1. Update Context state
-    updateContent(formData);
-
-    // 2. Call Save to Server / LocalStorage
-    const res = await saveToServer(currentPass);
+    // 1. Call Save to Server with latest formData & currentPass
+    const res = await saveToServer(formData, currentPass);
     if (res.success) {
+      if (res.updatedContent) {
+        setFormData(res.updatedContent);
+      }
       setSaveStatus({
         state: "success",
         message: res.message || "Đã lưu thay đổi thành công!",
@@ -282,6 +287,7 @@ export default function AdminDashboard() {
       if (typeof contentStr === "string") {
         const res = importJson(contentStr);
         if (res.success) {
+          if (res.data) setFormData(res.data);
           alert("Đã khôi phục dữ liệu từ bản sao lưu thành công!");
         } else {
           alert("Lỗi: " + res.error);
@@ -1639,7 +1645,8 @@ export default function AdminDashboard() {
                   type="button"
                   onClick={() => {
                     if (confirm("Bạn có chắc chắn muốn khôi phục toàn bộ nội dung về mặc định ban đầu không? Mọi nội dung đã chỉnh sửa sẽ bị xóa.")) {
-                      resetToDefault();
+                      const resetData = resetToDefault();
+                      if (resetData) setFormData(resetData);
                       alert("Đã khôi phục dữ liệu gốc thành công!");
                     }
                   }}

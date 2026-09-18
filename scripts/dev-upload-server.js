@@ -4,6 +4,7 @@ const path = require('path');
 
 const PORT = 3002;
 const uploadsDir = path.join(__dirname, '..', 'public', 'uploads');
+const imagesDir = path.join(__dirname, '..', 'public', 'images');
 
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
@@ -23,23 +24,52 @@ const server = http.createServer((req, res) => {
   // GET /list
   if (req.method === 'GET' && req.url.startsWith('/list')) {
     const files = [];
+
+    // 1. Read /public/uploads/
     if (fs.existsSync(uploadsDir)) {
       const all = fs.readdirSync(uploadsDir);
       all.forEach(f => {
         if (f.startsWith('.')) return;
         const full = path.join(uploadsDir, f);
-        const stat = fs.statSync(full);
-        if (stat.isFile()) {
-          files.push({
-            name: f,
-            url: '/uploads/' + f,
-            size: stat.size,
-            time: Math.floor(stat.mtimeMs / 1000),
-            category: 'upload'
-          });
-        }
+        try {
+          const stat = fs.statSync(full);
+          if (stat.isFile()) {
+            files.push({
+              name: f,
+              url: '/uploads/' + f,
+              size: stat.size,
+              time: Math.floor(stat.mtimeMs / 1000),
+              category: 'upload'
+            });
+          }
+        } catch (e) {}
       });
     }
+
+    // 2. Read /public/images/
+    if (fs.existsSync(imagesDir)) {
+      const allImgs = fs.readdirSync(imagesDir);
+      allImgs.forEach(f => {
+        if (f.startsWith('.')) return;
+        const full = path.join(imagesDir, f);
+        try {
+          const stat = fs.statSync(full);
+          if (stat.isFile() && /\.(jpe?g|png|webp|svg|gif)$/i.test(f)) {
+            files.push({
+              name: f,
+              url: '/images/' + f,
+              size: stat.size,
+              time: Math.floor(stat.mtimeMs / 1000),
+              category: 'gallery'
+            });
+          }
+        } catch (e) {}
+      });
+    }
+
+    // Sort newest first
+    files.sort((a, b) => b.time - a.time);
+
     res.writeHead(200, { 'Content-Type': 'application/json' });
     return res.end(JSON.stringify({ success: true, files }));
   }
@@ -77,10 +107,48 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // POST /save-content
+  if (req.method === 'POST' && req.url === '/save-content') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body);
+        delete payload._adminPassword;
+
+        if (!payload.admin) payload.admin = {};
+        payload.admin.updatedAt = new Date().toISOString();
+
+        const jsonStr = JSON.stringify(payload, null, 2);
+
+        // Write to public/content.json
+        const publicPath = path.join(__dirname, '..', 'public', 'content.json');
+        fs.writeFileSync(publicPath, jsonStr, 'utf8');
+
+        // Also write to src/data/content.json
+        const srcPath = path.join(__dirname, '..', 'src', 'data', 'content.json');
+        if (fs.existsSync(srcPath)) {
+          fs.writeFileSync(srcPath, jsonStr, 'utf8');
+        }
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({
+          success: true,
+          message: 'Đã lưu thay đổi thành công!',
+          updatedAt: payload.admin.updatedAt
+        }));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: false, message: err.message }));
+      }
+    });
+    return;
+  }
+
   res.writeHead(404);
   res.end();
 });
 
 server.listen(PORT, () => {
-  console.log(`[The View] Dev Upload Server running on http://localhost:${PORT}`);
+  console.log(`[The View] Dev Upload & Content Server running on http://localhost:${PORT}`);
 });

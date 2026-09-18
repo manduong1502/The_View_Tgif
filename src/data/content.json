@@ -18,12 +18,30 @@
     "logoSquare": "/images/logo_vuong.png"
   },
   "navLinks": [
-    { "label": "Không gian", "href": "#khong-gian" },
-    { "label": "Thực đơn", "href": "#thuc-don" },
-    { "label": "Về đêm", "href": "#ve-dem" },
-    { "label": "Sự kiện", "href": "#su-kien" },
-    { "label": "Đánh giá", "href": "#danh-gia" },
-    { "label": "FAQ", "href": "#faq" }
+    {
+      "label": "Không gian",
+      "href": "#khong-gian"
+    },
+    {
+      "label": "Thực đơn",
+      "href": "#thuc-don"
+    },
+    {
+      "label": "Về đêm",
+      "href": "#ve-dem"
+    },
+    {
+      "label": "Sự kiện",
+      "href": "#su-kien"
+    },
+    {
+      "label": "Đánh giá",
+      "href": "#danh-gia"
+    },
+    {
+      "label": "FAQ",
+      "href": "#faq"
+    }
   ],
   "moments": [
     {
@@ -105,7 +123,7 @@
         "title": "Dãy Bàn Tiệc Hoàng Hôn",
         "description": "Dãy bàn dài gỗ mộc tự nhiên hướng Tây đón trọn hoàng hôn dát vàng trên sông Hàn. Lựa chọn hoàn hảo cho tiệc kỷ niệm và hẹn hò lãng mạn.",
         "badge": "Golden Hour View",
-        "image": "/images/the-view-sunset.jpg",
+        "image": "/uploads/theview_20260918041241_Bracelets_ib64e.png",
         "capacity": "2 - 30 Khách"
       },
       {
@@ -323,9 +341,18 @@
       "social": {
         "title": "MẠNG XÃ HỘI",
         "links": [
-          { "name": "Facebook Fanpage", "url": "https://facebook.com/theviewYR.danang" },
-          { "name": "Instagram", "url": "https://instagram.com" },
-          { "name": "TikTok", "url": "https://tiktok.com" }
+          {
+            "name": "Facebook Fanpage",
+            "url": "https://facebook.com/theviewYR.danang"
+          },
+          {
+            "name": "Instagram",
+            "url": "https://instagram.com"
+          },
+          {
+            "name": "TikTok",
+            "url": "https://tiktok.com"
+          }
         ]
       }
     },
@@ -334,6 +361,6 @@
   },
   "admin": {
     "passwordHash": "theview@2026",
-    "updatedAt": "2026-09-18T09:45:00.000Z"
+    "updatedAt": "2026-09-18T04:21:13.416Z"
   }
 }
