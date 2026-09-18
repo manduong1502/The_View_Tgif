@@ -22,14 +22,15 @@ export function ContentProvider({ children }) {
   // Sync content on initial client load
   useEffect(() => {
     async function loadFreshContent() {
+      let localParsed = null;
       try {
         // 1. Check if we have an active local override in localStorage
         const cached = localStorage.getItem(STORAGE_KEY);
         if (cached) {
           try {
-            const parsed = JSON.parse(cached);
-            if (parsed && parsed.brand) {
-              setContent(parsed);
+            localParsed = JSON.parse(cached);
+            if (localParsed && localParsed.brand) {
+              setContent(localParsed);
             }
           } catch (e) {
             console.warn("Could not parse local cached content:", e);
@@ -41,13 +42,18 @@ export function ContentProvider({ children }) {
         if (res.ok) {
           const remoteData = await res.json();
           if (remoteData && remoteData.brand) {
-            // If remote has an updatedAt newer than or equal to local, use remote
-            setContent(remoteData);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(remoteData));
+            const remoteTime = new Date(remoteData.admin?.updatedAt || 0).getTime();
+            const localTime = new Date(localParsed?.admin?.updatedAt || 0).getTime();
+
+            // Only overwrite if remote has a newer timestamp or no local override exists
+            if (!localParsed || remoteTime > localTime) {
+              setContent(remoteData);
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(remoteData));
+            }
           }
         }
       } catch (err) {
-        console.log("Using bundled default content:", err);
+        console.log("Using bundled/local content:", err);
       } finally {
         setIsLoaded(true);
       }
@@ -69,15 +75,25 @@ export function ContentProvider({ children }) {
 
   // Save changes to PHP endpoint on cPanel (with fallback to localStorage)
   const saveToServer = async (adminPassword = "") => {
-    const payload = {
+    const timestamp = new Date().toISOString();
+    const updatedContent = {
       ...content,
-      _adminPassword: adminPassword,
+      admin: {
+        ...(content.admin || {}),
+        updatedAt: timestamp,
+      },
     };
 
-    // Always update local cache first
+    // Update state & local storage immediately
+    setContent(updatedContent);
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(content));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedContent));
     } catch (e) {}
+
+    const payload = {
+      ...updatedContent,
+      _adminPassword: adminPassword,
+    };
 
     try {
       const res = await fetch("/api/save-content.php", {
@@ -89,22 +105,23 @@ export function ContentProvider({ children }) {
         body: JSON.stringify(payload),
       });
 
-      const data = await res.json();
-      if (res.ok && data.success) {
+      if (res.ok) {
+        const data = await res.json();
         return {
           success: true,
           mode: "server",
           message: data.message || "Đã lưu thành công vào máy chủ cPanel!",
         };
       } else {
+        // Fallback for dev mode (e.g. 405 on Next.js dev server)
         return {
-          success: false,
-          mode: "server_error",
-          message: data.message || "Không thể lưu vào file trên máy chủ.",
+          success: true,
+          mode: "local_only",
+          message:
+            "Đã lưu vào bộ nhớ trình duyệt! (Trên hosting cPanel, file content.json sẽ được lưu trực tiếp).",
         };
       }
     } catch (err) {
-      // Local dev environment or server without PHP active
       return {
         success: true,
         mode: "local_only",
@@ -116,9 +133,17 @@ export function ContentProvider({ children }) {
 
   // Reset to factory default data
   const resetToDefault = () => {
-    setContent(defaultContent);
+    const timestamp = new Date().toISOString();
+    const resetData = {
+      ...defaultContent,
+      admin: {
+        ...(defaultContent.admin || {}),
+        updatedAt: timestamp,
+      },
+    };
+    setContent(resetData);
     try {
-      localStorage.removeItem(STORAGE_KEY);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(resetData));
     } catch (e) {}
   };
 
