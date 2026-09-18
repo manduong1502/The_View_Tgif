@@ -113,7 +113,7 @@ if ($writeResult === false) {
 
 echo json_encode([
     'success' => true,
-    'message' => 'Đã lưu toàn bộ nội dung website thành công vào file content.json!',
+    'message' => 'Đã lưu thay đổi thành công!',
     'bytesWritten' => $writeResult,
     'updatedAt' => $payload['admin']['updatedAt']
 ], JSON_UNESCAPED_UNICODE);

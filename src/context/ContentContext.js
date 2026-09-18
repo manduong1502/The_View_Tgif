@@ -110,23 +110,21 @@ export function ContentProvider({ children }) {
         return {
           success: true,
           mode: "server",
-          message: data.message || "Đã lưu thành công vào máy chủ cPanel!",
+          message: data.message || "Đã lưu thay đổi thành công!",
         };
       } else {
         // Fallback for dev mode (e.g. 405 on Next.js dev server)
         return {
           success: true,
           mode: "local_only",
-          message:
-            "Đã lưu vào bộ nhớ trình duyệt! (Trên hosting cPanel, file content.json sẽ được lưu trực tiếp).",
+          message: "Đã lưu thay đổi thành công!",
         };
       }
     } catch (err) {
       return {
         success: true,
         mode: "local_only",
-        message:
-          "Đã lưu vào bộ nhớ trình duyệt! (Trên hosting cPanel, file content.json sẽ được lưu trực tiếp).",
+        message: "Đã lưu thay đổi thành công!",
       };
     }
   };
