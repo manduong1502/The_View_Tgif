@@ -1,5 +1,6 @@
 import { Playfair_Display, Be_Vietnam_Pro } from "next/font/google";
 import "./globals.css";
+import { ContentProvider } from "@/context/ContentContext";
 
 const playfair = Playfair_Display({
   subsets: ["latin", "vietnamese"],
@@ -68,7 +69,7 @@ export default function RootLayout({ children }) {
         suppressHydrationWarning
         className="min-h-screen bg-[#060e18] text-slate-100 font-sans selection:bg-[#cba864] selection:text-[#060e18] antialiased"
       >
-        {children}
+        <ContentProvider>{children}</ContentProvider>
       </body>
     </html>
   );

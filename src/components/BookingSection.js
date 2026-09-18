@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { siteContent } from "@/data/content";
+import { useContent } from "@/context/ContentContext";
 import BookingSuccessModal from "./BookingSuccessModal";
 import ScrollReveal from "./ScrollReveal";
 
 export default function BookingSection({ preselectedPartyType }) {
-  const { booking } = siteContent;
-  const { info } = booking;
+  const { content } = useContent();
+  const booking = content?.booking || {};
+  const info = booking?.info || {};
 
   const [formData, setFormData] = useState({
     name: "",

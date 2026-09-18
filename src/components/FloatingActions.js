@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { siteContent } from "@/data/content";
+import { useContent } from "@/context/ContentContext";
 
 export default function FloatingActions() {
+  const { content } = useContent();
+  const siteContent = content;
   const [showTopBtn, setShowTopBtn] = useState(false);
 
   useEffect(() => {

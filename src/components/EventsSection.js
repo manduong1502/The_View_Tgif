@@ -1,10 +1,11 @@
 "use client";
 
-import { siteContent } from "@/data/content";
+import { useContent } from "@/context/ContentContext";
 import ScrollReveal from "./ScrollReveal";
 
 export default function EventsSection({ onSelectPartyType }) {
-  const { events } = siteContent;
+  const { content } = useContent();
+  const { events } = content;
 
   const handleCardClick = (partyType) => {
     if (onSelectPartyType) {

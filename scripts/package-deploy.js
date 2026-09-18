@@ -142,26 +142,58 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 `;
 
-// Inject into HTML files
-['index.html', '404.html', '_not-found.html'].forEach(fileName => {
-  const filePath = path.join(outDir, fileName);
-  if (fs.existsSync(filePath)) {
-    let html = fs.readFileSync(filePath, 'utf8');
-    
-    // Inject CSS in head
-    if (html.includes('</head>')) {
-      html = html.replace('</head>', `${googleFontsHead}\n</head>`);
-    }
+// Inject into all HTML files (index.html, 404.html, admin.html, etc.)
+function injectHtmlFiles(dir) {
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      injectHtmlFiles(fullPath);
+    } else if (entry.name.endsWith('.html')) {
+      let html = fs.readFileSync(fullPath, 'utf8');
+      
+      // Inject CSS & Fonts in head
+      if (html.includes('</head>')) {
+        html = html.replace('</head>', `${googleFontsHead}\n</head>`);
+      }
 
-    // Inject JS before </body>
-    if (html.includes('</body>')) {
-      html = html.replace('</body>', `${vanillaInteractiveJs}\n</body>`);
-    }
+      // Inject JS before </body> only on public pages
+      if (html.includes('</body>') && !fullPath.includes('admin')) {
+        html = html.replace('</body>', `${vanillaInteractiveJs}\n</body>`);
+      }
 
-    fs.writeFileSync(filePath, html, 'utf8');
-    console.log(`   ✓ Đã nhúng Inline CSS + Fonts CDN + Interactive Engine vào ${fileName}`);
+      fs.writeFileSync(fullPath, html, 'utf8');
+      console.log(`   ✓ Đã nhúng Inline CSS + Fonts CDN vào ${path.relative(outDir, fullPath)}`);
+    }
   }
-});
+}
+
+injectHtmlFiles(outDir);
+
+// Ensure content.json exists in outDir
+const rootContentJson = path.join(__dirname, '..', 'public', 'content.json');
+if (fs.existsSync(rootContentJson)) {
+  fs.copyFileSync(rootContentJson, path.join(outDir, 'content.json'));
+  console.log('   ✓ Đã sao chép public/content.json -> out/content.json');
+}
+
+// Ensure api/save-content.php exists in outDir
+const apiSavePhp = path.join(__dirname, '..', 'public', 'api', 'save-content.php');
+if (fs.existsSync(apiSavePhp)) {
+  const outApiDir = path.join(outDir, 'api');
+  if (!fs.existsSync(outApiDir)) fs.mkdirSync(outApiDir, { recursive: true });
+  fs.copyFileSync(apiSavePhp, path.join(outApiDir, 'save-content.php'));
+  console.log('   ✓ Đã sao chép public/api/save-content.php -> out/api/save-content.php');
+}
+
+// Ensure /admin/index.html exists for Apache directory access
+const adminHtmlPath = path.join(outDir, 'admin.html');
+const adminDirPath = path.join(outDir, 'admin');
+if (fs.existsSync(adminHtmlPath)) {
+  if (!fs.existsSync(adminDirPath)) fs.mkdirSync(adminDirPath, { recursive: true });
+  fs.copyFileSync(adminHtmlPath, path.join(adminDirPath, 'index.html'));
+  console.log('   ✓ Đã tạo out/admin/index.html cho Apache Directory Routing');
+}
 
 // 5. Generate Bulletproof .htaccess
 console.log('🛡️ 5. Đang tạo cấu hình máy chủ Apache (.htaccess)...');
@@ -175,7 +207,10 @@ RewriteEngine On
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-# 2. Prevent rewrite loop on existing static files
+# 2. Admin Panel Routing
+RewriteRule ^admin/?$ /admin/index.html [L]
+
+# 3. Prevent rewrite loop on existing static files
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]

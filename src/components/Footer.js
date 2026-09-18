@@ -1,9 +1,12 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { siteContent } from "@/data/content";
+import { useContent } from "@/context/ContentContext";
 
 export default function Footer() {
-  const { footer, brand } = siteContent;
+  const { content } = useContent();
+  const { footer, brand } = content;
 
   return (
     <footer className="bg-[#040910] border-t border-[#cba864]/15 pt-16 pb-12 text-slate-300">

@@ -1,34 +1,13 @@
-"use client";
-
+import { useContent } from "@/context/ContentContext";
 import ScrollReveal from "./ScrollReveal";
 
-const REVIEWS = [
-  {
-    quote:
-      "Góc nhìn trực diện Cầu Rồng từ ngay mực nước sông Hàn quá đắt giá. Hoàng hôn buông xuống đẹp ngỡ ngàng, sashimi tươi ngọt và không gian du thuyền rất lãng mạn.",
-    author: "Anh Minh Hoàng",
-    role: "Thực khách tiệc tối cuối tuần",
-    rating: 5,
-  },
-  {
-    quote:
-      "Bữa tiệc sinh nhật của gia đình được chuẩn bị chu đáo từ nến hoa đến âm nhạc. Bàn gỗ mộc sang trọng và view cầu sông Hàn lung linh về đêm.",
-    author: "Chị Thu Trang",
-    role: "Tiệc sinh nhật riêng tư",
-    rating: 5,
-  },
-  {
-    quote:
-      "Ngồi sát mép nước đón gió sông Hàn lúc 21h xem Cầu Rồng phun lửa là trải nghiệm đỉnh cao nhất định phải thử khi đến Đà Nẵng.",
-    author: "Tạp chí Gourmet Vietnam",
-    role: "Chuyên mục Ẩm thực & Trải nghiệm",
-    rating: 5,
-  },
-];
-
 export default function ReviewsSection() {
+  const { content } = useContent();
+  const reviews = content?.reviews || {};
+  const reviewItems = reviews.items || [];
+
   return (
-    <section className="py-20 sm:py-28 relative bg-[#060e18] border-t border-[#cba864]/10 overflow-hidden">
+    <section id="danh-gia" className="py-20 sm:py-28 relative bg-[#060e18] border-t border-[#cba864]/10 overflow-hidden">
       {/* Ambient glow */}
       <div className="ambient-glow w-80 h-80 bg-[#cba864]/6 top-1/2 left-10" />
 
@@ -36,17 +15,17 @@ export default function ReviewsSection() {
         <ScrollReveal className="text-center max-w-2xl mx-auto mb-14">
           <div className="mb-3">
             <span className="kicker-line mx-auto justify-center">
-              TRẢI NGHIỆM THỰC KHÁCH
+              {reviews.kicker || "TRẢI NGHIỆM THỰC KHÁCH"}
             </span>
           </div>
           <h2 className="font-serif text-3xl sm:text-4xl text-white font-normal leading-[1.2]">
-            Những đêm khó quên trên sông Hàn
+            {reviews.headline || "Những đêm khó quên trên sông Hàn"}
           </h2>
         </ScrollReveal>
 
         {/* 3 Review Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-          {REVIEWS.map((rev, idx) => (
+          {reviewItems.map((rev, idx) => (
             <ScrollReveal
               key={idx}
               delay={idx === 0 ? "delay-100" : idx === 1 ? "delay-200" : "delay-300"}

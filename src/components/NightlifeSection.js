@@ -1,11 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { siteContent } from "@/data/content";
+import { useContent } from "@/context/ContentContext";
 import ScrollReveal from "./ScrollReveal";
 
 export default function NightlifeSection() {
-  const { nightlife } = siteContent;
+  const { content } = useContent();
+  const { nightlife } = content;
 
   return (
     <section id="ve-dem" className="py-20 sm:py-32 relative bg-[#060e18] overflow-hidden">

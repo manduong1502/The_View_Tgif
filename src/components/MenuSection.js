@@ -2,21 +2,23 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { siteContent } from "@/data/content";
+import { useContent } from "@/context/ContentContext";
 import ScrollReveal from "./ScrollReveal";
 
-const CATEGORIES = ["Tất cả", "Khai vị", "Món nướng", "Món chính", "Signature"];
-
 export default function MenuSection() {
-  const { menu } = siteContent;
+  const { content } = useContent();
+  const { menu } = content;
   const [activeTab, setActiveTab] = useState("Tất cả");
   const [selectedDish, setSelectedDish] = useState(null);
 
+  const dishes = menu?.dishes || [];
+  const tags = ["Tất cả", ...Array.from(new Set(dishes.map((d) => d.tag).filter(Boolean)))];
+
   const filteredDishes =
     activeTab === "Tất cả"
-      ? menu.dishes
-      : menu.dishes.filter(
-          (d) => d.tag.toLowerCase() === activeTab.toLowerCase()
+      ? dishes
+      : dishes.filter(
+          (d) => d.tag?.toLowerCase() === activeTab.toLowerCase()
         );
 
   return (
@@ -39,7 +41,7 @@ export default function MenuSection() {
 
           {/* Category Filter Chips */}
           <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 mt-8 pt-2">
-            {CATEGORIES.map((tab) => (
+            {tags.map((tab) => (
               <button
                 key={tab}
                 type="button"

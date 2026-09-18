@@ -2,14 +2,15 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { siteContent } from "@/data/content";
+import { useContent } from "@/context/ContentContext";
 import ScrollReveal from "./ScrollReveal";
 
 export default function ExperienceSection() {
-  const { experience } = siteContent;
+  const { content } = useContent();
+  const { experience } = content;
   const [activeZoneIndex, setActiveZoneIndex] = useState(0);
 
-  const activeZone = experience.zones[activeZoneIndex];
+  const activeZone = (experience?.zones && experience.zones[activeZoneIndex]) || (experience?.zones && experience.zones[0]) || {};
 
   return (
     <section id="khong-gian" className="py-20 sm:py-32 relative overflow-hidden bg-[#060e18]">

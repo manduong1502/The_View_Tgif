@@ -2,14 +2,16 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { siteContent } from "@/data/content";
+import { useContent } from "@/context/ContentContext";
 
 export default function HeroSection() {
-  const { hero, moments } = siteContent;
+  const { content } = useContent();
+  const { hero, moments, brand } = content;
+  const siteContent = content;
   const [activeMomentId, setActiveMomentId] = useState("sunset");
 
   const currentMoment =
-    moments.find((m) => m.id === activeMomentId) || moments[0];
+    (moments && moments.find((m) => m.id === activeMomentId)) || (moments && moments[0]) || {};
 
   return (
     <section className="relative min-h-[96vh] lg:min-h-screen flex flex-col justify-between pt-28 sm:pt-36 pb-10 overflow-hidden">

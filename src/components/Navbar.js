@@ -3,9 +3,11 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { siteContent } from "@/data/content";
+import { useContent } from "@/context/ContentContext";
 
 export default function Navbar() {
+  const { content } = useContent();
+  const siteContent = content;
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
