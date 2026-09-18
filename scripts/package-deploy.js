@@ -294,16 +294,32 @@ if (!file_exists($zipFile)) {
 $zip = new ZipArchive;
 $res = $zip->open($zipFile);
 if ($res === TRUE) {
-    $zip->extractTo(__DIR__);
+    $extractSuccess = @$zip->extractTo(__DIR__);
     $zip->close();
-    echo '<div style="font-family:sans-serif;padding:50px;text-align:center;background:#060e18;color:#cba864;min-height:100vh;">';
-    echo '<h1 style="color:#ffffff;">🎉 GIẢI NÉN THÀNH CÔNG 100%!</h1>';
-    echo '<p style="color:#cbd5e1;font-size:18px;">Toàn bộ website THE VIEW đã được giải nén hoàn chỉnh vào hosting.</p>';
-    echo '<p><a href="/" style="display:inline-block;padding:14px 28px;background:#cba864;color:#060e18;text-decoration:none;font-weight:bold;border-radius:4px;margin-top:20px;">XEM TRANG CHỦ THE VIEW NGAY ➔</a></p>';
-    echo '<p style="color:#64748b;font-size:12px;margin-top:30px;">(Bạn có thể xóa file unzip.php này sau khi giải nén xong)</p>';
-    echo '</div>';
+    if ($extractSuccess) {
+        echo '<div style="font-family:sans-serif;padding:50px;text-align:center;background:#060e18;color:#cba864;min-height:100vh;">';
+        echo '<h1 style="color:#ffffff;">🎉 GIẢI NÉN THÀNH CÔNG 100%!</h1>';
+        echo '<p style="color:#cbd5e1;font-size:18px;">Toàn bộ website THE VIEW đã được giải nén hoàn chỉnh vào hosting.</p>';
+        echo '<p><a href="/" style="display:inline-block;padding:14px 28px;background:#cba864;color:#060e18;text-decoration:none;font-weight:bold;border-radius:4px;margin-top:20px;">XEM TRANG CHỦ THE VIEW NGAY ➔</a></p>';
+        echo '<p style="color:#64748b;font-size:12px;margin-top:30px;">(Bạn có thể xóa file unzip.php này sau khi giải nén xong)</p>';
+        echo '</div>';
+    } else {
+        echo '<div style="font-family:sans-serif;padding:40px;text-align:center;background:#060e18;color:#f87171;min-height:100vh;">';
+        echo '<h2 style="color:#f43f5e;font-size:24px;">⚠️ PHP Không Có Quyền Ghi File (Permission Denied)</h2>';
+        echo '<p style="color:#cbd5e1;font-size:16px;max-width:600px;margin:20px auto;line-height:1.6;">Cơ chế bảo mật trên cPanel chặn mã PHP giải nén trực tiếp vào thư mục này.</p>';
+        echo '<div style="background:#0c1c2e;border:1px solid #cba864;padding:24px;border-radius:12px;max-width:600px;margin:20px auto;text-align:left;color:#e2e8f0;">';
+        echo '<p style="font-weight:bold;color:#cba864;margin-bottom:10px;">👉 HÃY GIẢI NÉN BẰNG CPANEL FILE MANAGER (CHỈ MẤT 10 GIÂY):</p>';
+        echo '<ol style="padding-left:20px;line-height:1.8;font-size:14px;">';
+        echo '<li>Mở tab <b>cPanel File Manager</b> đang mở sẵn của bạn.</li>';
+        echo '<li>Chuột phải vào file <b>theview-deploy.zip</b> ➔ Chọn <b>Extract</b>.</li>';
+        echo '<li>Xóa bỏ phần thư mục con ở cuối (chỉ để đường dẫn <code>theview.tgifgroupvn.com</code>).</li>';
+        echo '<li>Bấm nút <b>Extract File(s)</b> ➔ Xong ngay 100%!</li>';
+        echo '</ol>';
+        echo '</div>';
+        echo '</div>';
+    }
 } else {
-    echo '<div style="font-family:sans-serif;padding:40px;text-align:center;color:#e11d48"><h2>❌ Lỗi giải nén: Mã lỗi ' . $res . '</h2></div>';
+    echo '<div style="font-family:sans-serif;padding:40px;text-align:center;color:#e11d48"><h2>❌ Lỗi mở file zip: Mã lỗi ' . $res . '</h2></div>';
 }
 ?>`;
 
