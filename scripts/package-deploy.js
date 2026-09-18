@@ -177,13 +177,28 @@ if (fs.existsSync(rootContentJson)) {
   console.log('   ✓ Đã sao chép public/content.json -> out/content.json');
 }
 
-// Ensure api/save-content.php exists in outDir
+// Ensure api/save-content.php and api/upload.php exist in outDir
 const apiSavePhp = path.join(__dirname, '..', 'public', 'api', 'save-content.php');
+const apiUploadPhp = path.join(__dirname, '..', 'public', 'api', 'upload.php');
+const outApiDir = path.join(outDir, 'api');
+if (!fs.existsSync(outApiDir)) fs.mkdirSync(outApiDir, { recursive: true });
+
 if (fs.existsSync(apiSavePhp)) {
-  const outApiDir = path.join(outDir, 'api');
-  if (!fs.existsSync(outApiDir)) fs.mkdirSync(outApiDir, { recursive: true });
   fs.copyFileSync(apiSavePhp, path.join(outApiDir, 'save-content.php'));
   console.log('   ✓ Đã sao chép public/api/save-content.php -> out/api/save-content.php');
+}
+
+if (fs.existsSync(apiUploadPhp)) {
+  fs.copyFileSync(apiUploadPhp, path.join(outApiDir, 'upload.php'));
+  console.log('   ✓ Đã sao chép public/api/upload.php -> out/api/upload.php');
+}
+
+// Ensure out/uploads directory exists
+const outUploadsDir = path.join(outDir, 'uploads');
+if (!fs.existsSync(outUploadsDir)) {
+  fs.mkdirSync(outUploadsDir, { recursive: true });
+  fs.writeFileSync(path.join(outUploadsDir, '.gitkeep'), '', 'utf8');
+  console.log('   ✓ Đã tạo thư mục out/uploads/ sẵn sàng lưu ảnh');
 }
 
 // Ensure /admin/index.html exists for Apache directory access

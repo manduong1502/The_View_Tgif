@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useContent } from "@/context/ContentContext";
 import Link from "next/link";
 import Image from "next/image";
+import ImageUploadField, { uploadImageFile } from "@/components/admin/ImageUploadField";
 
 export default function AdminDashboard() {
   const {
@@ -24,6 +25,48 @@ export default function AdminDashboard() {
   const [authError, setAuthError] = useState("");
   const [saveStatus, setSaveStatus] = useState({ state: "idle", message: "" });
   const [adminPassChange, setAdminPassChange] = useState({ current: "", newPass: "", confirm: "" });
+  const [galleryImages, setGalleryImages] = useState([]);
+  const [isLoadingGallery, setIsLoadingGallery] = useState(false);
+  const [galleryUploadStatus, setGalleryUploadStatus] = useState("");
+
+  const loadGalleryImages = async () => {
+    setIsLoadingGallery(true);
+    try {
+      const res = await fetch("/api/upload.php?action=list");
+      const data = await res.json();
+      if (data.success && Array.isArray(data.files)) {
+        setGalleryImages(data.files);
+      }
+    } catch (e) {
+      console.error("Gallery fetch error:", e);
+    } finally {
+      setIsLoadingGallery(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === "gallery") {
+      loadGalleryImages();
+    }
+  }, [activeTab]);
+
+  const handleBatchUpload = async (e) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+    setGalleryUploadStatus(`Đang tải lên 0/${files.length} ảnh...`);
+    const currentPass = formData?.admin?.passwordHash || "theview@2026";
+    let count = 0;
+    for (const f of files) {
+      const res = await uploadImageFile(f, currentPass);
+      if (res.success) {
+        count++;
+        setGalleryUploadStatus(`Đang tải lên ${count}/${files.length} ảnh...`);
+      }
+    }
+    setGalleryUploadStatus(`Hoàn tất! Đã tải lên ${count} ảnh vào thư mục /uploads/.`);
+    await loadGalleryImages();
+    setTimeout(() => setGalleryUploadStatus(""), 4000);
+  };
 
   // Sync draft whenever context finishes initial loading
   useEffect(() => {
@@ -1424,6 +1467,84 @@ export default function AdminDashboard() {
                   />
                 </div>
               </div>
+            </div>
+          )}
+
+                    {/* TAB 11: GALLERY & UPLOADS */}
+          {activeTab === "gallery" && (
+            <div className="space-y-6">
+              <div className="border-b border-white/10 pb-4 flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <h2 className="font-serif text-xl sm:text-2xl text-white">Thư Viện Hình Ảnh</h2>
+                  <p className="text-xs text-slate-300 mt-1">Quản lý và tải ảnh trực tiếp từ thiết bị vào thư mục uploads của hệ thống.</p>
+                </div>
+
+                <div>
+                  <label className="admin-btn-gold px-4 py-2.5 rounded text-xs font-bold uppercase tracking-wider cursor-pointer flex items-center gap-2">
+                    <span>Tải ảnh mới vào thư viện ↑</span>
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      onChange={handleBatchUpload}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+              </div>
+
+              {galleryUploadStatus && (
+                <div className="p-3 bg-emerald-950/60 border border-emerald-500/40 text-emerald-200 rounded-lg text-xs font-medium">
+                  {galleryUploadStatus}
+                </div>
+              )}
+
+              {/* Image Grid */}
+              {isLoadingGallery ? (
+                <div className="py-12 text-center text-slate-400 text-xs">
+                  Đang tải danh sách ảnh...
+                </div>
+              ) : galleryImages.length === 0 ? (
+                <div className="py-12 px-6 border-2 border-dashed border-white/10 rounded-2xl text-center space-y-3">
+                  <p className="text-sm text-slate-300 font-medium">Chưa có ảnh nào trong thư mục tải lên</p>
+                  <p className="text-xs text-slate-400">Bấm nút &quot;Tải ảnh mới vào thư viện&quot; phía trên hoặc tải ảnh trực tiếp ở các mục thực đơn/khu vực để đưa ảnh vào hệ thống.</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                  {galleryImages.map((img, idx) => (
+                    <div
+                      key={idx}
+                      className="p-2.5 bg-[#091728] rounded-xl border border-white/10 space-y-2"
+                    >
+                      <div className="relative aspect-video rounded-lg overflow-hidden bg-[#050d18]">
+                        <img
+                          src={img.url}
+                          alt={img.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-[11px] text-slate-200 font-medium truncate" title={img.name}>
+                          {img.name}
+                        </p>
+                        <div className="flex items-center justify-between text-[10px] text-slate-400">
+                          <span>{(img.size / 1024).toFixed(0)} KB</span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              navigator.clipboard.writeText(img.url);
+                              alert("Đã sao chép đường dẫn: " + img.url);
+                            }}
+                            className="text-[#cba864] hover:underline cursor-pointer font-semibold"
+                          >
+                            Sao chép link
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
