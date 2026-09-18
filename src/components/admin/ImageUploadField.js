@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useRef } from "react";
+import MediaLibraryModal from "./MediaLibraryModal";
 
 /**
- * Upload image to cPanel /api/upload.php or Next.js /api/upload
+ * Upload image to cPanel /api/upload.php
  */
 export async function uploadImageFile(file, adminPassword) {
   const formData = new FormData();
@@ -31,20 +32,22 @@ export async function uploadImageFile(file, adminPassword) {
 }
 
 /**
- * High-performance Image Upload Field for Admin CMS
+ * Foolproof Image Field for Admin CMS:
+ * Users can either pick from the full visual Media Library OR upload directly.
  */
 export default function ImageUploadField({
   label,
   value,
   onChange,
   adminPassword,
-  placeholder = "/uploads/ten-anh.jpg",
+  placeholder = "Chưa có ảnh",
 }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const fileInputRef = useRef(null);
 
-  const handleSelectFile = async (e) => {
+  const handleDirectUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -54,7 +57,7 @@ export default function ImageUploadField({
     const res = await uploadImageFile(file, adminPassword);
     setIsUploading(false);
 
-    if (res.success) {
+    if (res.success && res.url) {
       onChange(res.url);
     } else {
       setErrorMsg(res.message || "Tải ảnh thất bại. Vui lòng thử lại.");
@@ -66,16 +69,21 @@ export default function ImageUploadField({
   };
 
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-1.5 w-full">
       {label && (
         <label className="text-xs text-[#cba864] font-semibold block">
           {label}
         </label>
       )}
 
-      <div className="flex items-center gap-3">
-        {/* Preview Box */}
-        <div className="relative w-14 h-14 rounded-lg bg-[#050d18] border border-white/15 overflow-hidden shrink-0 flex items-center justify-center">
+      <div className="p-3 bg-[#060e18] border border-white/10 rounded-xl flex items-center gap-3">
+        {/* Thumbnail Preview (Clickable to open library) */}
+        <button
+          type="button"
+          onClick={() => setIsModalOpen(true)}
+          className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-lg bg-[#0a1728] border border-white/15 overflow-hidden shrink-0 flex items-center justify-center cursor-pointer group hover:border-[#cba864] transition-colors"
+          title="Click để chọn ảnh từ thư viện"
+        >
           {value ? (
             <img
               src={value}
@@ -86,60 +94,90 @@ export default function ImageUploadField({
               }}
             />
           ) : (
-            <span className="text-[10px] text-slate-500 font-medium">Trống</span>
+            <div className="text-center p-1">
+              <span className="text-xs text-[#cba864] block font-bold">+</span>
+              <span className="text-[9px] text-slate-400 block">Chọn ảnh</span>
+            </div>
           )}
-        </div>
+          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-[10px] text-white font-medium transition-opacity">
+            Đổi ảnh
+          </div>
+        </button>
 
-        {/* Input & Action Buttons */}
-        <div className="flex-1 flex flex-wrap items-center gap-2">
-          <input
-            type="text"
-            value={value || ""}
-            onChange={(e) => onChange(e.target.value)}
-            placeholder={placeholder}
-            className="admin-input flex-1 min-w-[180px] px-3 py-2 rounded text-xs"
-          />
+        {/* Info & Action Buttons */}
+        <div className="flex-1 min-w-0 space-y-2">
+          <div className="flex items-center justify-between gap-2">
+            <span
+              className="text-xs text-slate-300 font-medium truncate block"
+              title={value || placeholder}
+            >
+              {value ? value : <span className="text-slate-500 italic">{placeholder}</span>}
+            </span>
 
-          <button
-            type="button"
-            disabled={isUploading}
-            onClick={() => fileInputRef.current?.click()}
-            className="admin-btn-gold px-3.5 py-2 rounded text-xs font-bold cursor-pointer shrink-0 flex items-center gap-1.5"
-            title="Chọn file ảnh từ máy tính hoặc điện thoại để tải lên"
-          >
-            {isUploading ? (
-              <>
-                <span className="w-3 h-3 border-2 border-[#060e18] border-t-transparent rounded-full animate-spin" />
-                <span>Đang tải...</span>
-              </>
-            ) : (
-              <span>Tải ảnh lên</span>
+            {value && (
+              <button
+                type="button"
+                onClick={() => onChange("")}
+                className="text-[11px] text-slate-400 hover:text-rose-400 cursor-pointer shrink-0"
+                title="Gỡ ảnh này"
+              >
+                Gỡ ảnh
+              </button>
             )}
-          </button>
+          </div>
 
-          {value && (
+          <div className="flex flex-wrap items-center gap-2">
             <button
               type="button"
-              onClick={() => onChange("")}
-              className="px-2.5 py-2 text-slate-400 hover:text-rose-400 text-xs rounded border border-white/10 hover:border-rose-500/30 cursor-pointer"
-              title="Xóa đường dẫn ảnh"
+              onClick={() => setIsModalOpen(true)}
+              className="admin-btn-gold px-3 py-1.5 rounded text-xs font-bold cursor-pointer flex items-center gap-1.5"
             >
-              ✕
+              <span>🖼️ Chọn từ thư viện ảnh</span>
             </button>
-          )}
 
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"
-            onChange={handleSelectFile}
-            className="hidden"
-          />
+            <button
+              type="button"
+              disabled={isUploading}
+              onClick={() => fileInputRef.current?.click()}
+              className="admin-btn-secondary px-3 py-1.5 rounded text-xs font-medium cursor-pointer flex items-center gap-1.5"
+            >
+              {isUploading ? (
+                <>
+                  <span className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span>Đang tải lên...</span>
+                </>
+              ) : (
+                <span>Tải ảnh mới từ máy ↑</span>
+              )}
+            </button>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"
+              onChange={handleDirectUpload}
+              className="hidden"
+            />
+          </div>
         </div>
       </div>
 
       {errorMsg && (
         <p className="text-[11px] text-rose-400 font-medium">{errorMsg}</p>
+      )}
+
+      {/* Media Library Modal */}
+      {isModalOpen && (
+        <MediaLibraryModal
+          currentValue={value}
+          onSelect={(url) => {
+            onChange(url);
+            setIsModalOpen(false);
+          }}
+          onClose={() => setIsModalOpen(false)}
+          adminPassword={adminPassword}
+          title={label || "Chọn hình ảnh"}
+        />
       )}
     </div>
   );

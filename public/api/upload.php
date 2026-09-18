@@ -22,11 +22,14 @@ if (!is_dir($uploadDir)) {
 }
 
 // -------------------------------------------------------------
-// GET / POST ?action=list -> List existing uploaded files
+// GET / POST ?action=list -> List existing uploaded and system images
 // -------------------------------------------------------------
 $action = isset($_GET['action']) ? $_GET['action'] : (isset($_POST['action']) ? $_POST['action'] : '');
 if ($action === 'list') {
     $files = [];
+    $validExts = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg', 'ico'];
+
+    // 1. Scan uploads directory
     if (is_dir($uploadDir)) {
         $scanned = scandir($uploadDir);
         foreach ($scanned as $f) {
@@ -34,21 +37,68 @@ if ($action === 'list') {
             $full = $uploadDir . $f;
             if (is_file($full)) {
                 $ext = strtolower(pathinfo($f, PATHINFO_EXTENSION));
-                if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg', 'ico'])) {
+                if (in_array($ext, $validExts)) {
                     $files[] = [
                         'name' => $f,
                         'url' => '/uploads/' . $f,
                         'size' => filesize($full),
-                        'time' => filemtime($full)
+                        'time' => filemtime($full),
+                        'category' => 'upload'
                     ];
                 }
             }
         }
-        // Sort newest first
-        usort($files, function($a, $b) {
-            return $b['time'] - $a['time'];
-        });
     }
+
+    // 2. Scan standard images directory
+    $imagesDir = dirname(__DIR__) . '/images/';
+    if (is_dir($imagesDir)) {
+        $scannedImg = scandir($imagesDir);
+        foreach ($scannedImg as $f) {
+            if ($f === '.' || $f === '..' || $f === 'logo') continue;
+            $full = $imagesDir . $f;
+            if (is_file($full)) {
+                $ext = strtolower(pathinfo($f, PATHINFO_EXTENSION));
+                if (in_array($ext, $validExts)) {
+                    $files[] = [
+                        'name' => $f,
+                        'url' => '/images/' . $f,
+                        'size' => filesize($full),
+                        'time' => filemtime($full),
+                        'category' => 'system'
+                    ];
+                }
+            }
+        }
+        // Also scan logo subdirectory
+        $logoDir = $imagesDir . 'logo/';
+        if (is_dir($logoDir)) {
+            $scannedLogo = scandir($logoDir);
+            foreach ($scannedLogo as $f) {
+                if ($f === '.' || $f === '..') continue;
+                $full = $logoDir . $f;
+                if (is_file($full)) {
+                    $ext = strtolower(pathinfo($f, PATHINFO_EXTENSION));
+                    if (in_array($ext, $validExts)) {
+                        $files[] = [
+                            'name' => $f,
+                            'url' => '/images/logo/' . $f,
+                            'size' => filesize($full),
+                            'time' => filemtime($full),
+                            'category' => 'logo'
+                        ];
+                    }
+                }
+            }
+        }
+    }
+
+    // Sort: uploads first (newest), then system images
+    usort($files, function($a, $b) {
+        if ($a['category'] === 'upload' && $b['category'] !== 'upload') return -1;
+        if ($a['category'] !== 'upload' && $b['category'] === 'upload') return 1;
+        return $b['time'] - $a['time'];
+    });
 
     echo json_encode([
         'success' => true,

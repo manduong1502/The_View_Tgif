@@ -607,25 +607,21 @@ export default function AdminDashboard() {
                   />
                 </div>
 
-                <div>
-                  <label className="text-xs text-[#cba864] font-semibold block mb-1.5">Đường dẫn Logo Ngang (Header)</label>
-                  <input
-                    type="text"
+                <ImageUploadField
+                  label="Logo Ngang (Thanh điều hướng Header)"
                     value={formData.brand?.logoHorizontal || ""}
-                    onChange={(e) => handleFieldChange("brand", "logoHorizontal", e.target.value)}
-                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm"
-                  />
-                </div>
+                    onChange={(val) => handleFieldChange("brand", "logoHorizontal", val)}
+                    adminPassword={formData?.admin?.passwordHash}
+                    placeholder="/images/logo/TheView-HorizontalLogo-01.png"
+                />
 
-                <div>
-                  <label className="text-xs text-[#cba864] font-semibold block mb-1.5">Đường dẫn Logo Vuông (Favicon/Icon)</label>
-                  <input
-                    type="text"
-                    value={formData.brand?.logoSquare || ""}
-                    onChange={(e) => handleFieldChange("brand", "logoSquare", e.target.value)}
-                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm"
-                  />
-                </div>
+                <ImageUploadField
+                  label="Logo Vuông (Biểu tượng / Favicon)"
+                  value={formData.brand?.logoSquare || ""}
+                  onChange={(val) => handleFieldChange("brand", "logoSquare", val)}
+                  adminPassword={formData?.admin?.passwordHash}
+                  placeholder="/images/logo_vuong.png"
+                />
               </div>
             </div>
           )}
@@ -826,17 +822,16 @@ export default function AdminDashboard() {
                         />
                       </div>
 
-                      <div>
-                        <label className="text-[11px] text-slate-300 block mb-1">Đường dẫn hình ảnh thực tế</label>
-                        <input
-                          type="text"
+                      <div className="sm:col-span-2">
+                        <ImageUploadField
+                          label="Hình ảnh khoảnh khắc thực tế"
                           value={moment.image}
-                          onChange={(e) => {
+                          onChange={(val) => {
                             const moments = [...(formData.moments || [])];
-                            moments[idx] = { ...moments[idx], image: e.target.value };
+                            moments[idx] = { ...moments[idx], image: val };
                             setFormData((prev) => ({ ...prev, moments }));
                           }}
-                          className="admin-input w-full px-3 py-2 rounded text-xs"
+                          adminPassword={formData?.admin?.passwordHash}
                         />
                       </div>
                     </div>
@@ -950,17 +945,16 @@ export default function AdminDashboard() {
                             className="admin-input w-full px-3 py-1.5 rounded text-xs"
                           />
                         </div>
-                        <div>
-                          <label className="text-[11px] text-slate-400 block mb-1">Đường dẫn ảnh</label>
-                          <input
-                            type="text"
+                        <div className="sm:col-span-2">
+                          <ImageUploadField
+                            label="Hình ảnh khu vực boong tàu"
                             value={zone.image}
-                            onChange={(e) => {
+                            onChange={(val) => {
                               const zones = [...(formData.experience?.zones || [])];
-                              zones[idx] = { ...zones[idx], image: e.target.value };
+                              zones[idx] = { ...zones[idx], image: val };
                               handleFieldChange("experience", "zones", zones);
                             }}
-                            className="admin-input w-full px-3 py-1.5 rounded text-xs"
+                            adminPassword={formData?.admin?.passwordHash}
                           />
                         </div>
                       </div>
@@ -1088,13 +1082,12 @@ export default function AdminDashboard() {
                         />
                       </div>
 
-                      <div>
-                        <label className="text-[11px] text-slate-300 block mb-1">Đường dẫn hình ảnh</label>
-                        <input
-                          type="text"
+                      <div className="sm:col-span-3">
+                        <ImageUploadField
+                          label="Hình ảnh món ăn"
                           value={dish.image}
-                          onChange={(e) => handleDishChange(idx, "image", e.target.value)}
-                          className="admin-input w-full px-3 py-2 rounded text-xs"
+                          onChange={(val) => handleDishChange(idx, "image", val)}
+                          adminPassword={formData?.admin?.passwordHash}
                         />
                       </div>
                     </div>
@@ -1140,6 +1133,15 @@ export default function AdminDashboard() {
                     value={formData.nightlife?.description || ""}
                     onChange={(e) => handleFieldChange("nightlife", "description", e.target.value)}
                     className="admin-input w-full px-3.5 py-2.5 rounded text-sm"
+                  />
+                </div>
+
+                <div>
+                  <ImageUploadField
+                    label="Hình ảnh trải nghiệm về đêm & Cầu Rồng"
+                    value={formData.nightlife?.image || ""}
+                    onChange={(val) => handleFieldChange("nightlife", "image", val)}
+                    adminPassword={formData?.admin?.passwordHash}
                   />
                 </div>
 
