@@ -35,7 +35,7 @@ export default function ReviewsSection() {
                 {/* Stars */}
                 <div>
                   <div className="flex items-center gap-1 text-[#cba864] mb-4">
-                    {[...Array(rev.rating)].map((_, i) => (
+                    {[...Array(Math.max(1, Math.min(5, Math.round(Number(rev.rating) || 5))))].map((_, i) => (
                       <span key={i} className="text-sm">
                         ★
                       </span>

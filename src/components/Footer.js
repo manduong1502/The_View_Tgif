@@ -17,8 +17,8 @@ export default function Footer() {
           <div className="lg:col-span-4 space-y-4">
             <div className="relative h-12 w-48 mb-3">
               <Image
-                src={brand.logoHorizontal}
-                alt={brand.name}
+                src={brand?.logoHorizontal || "/images/logo/TheView-HorizontalLogo-01.png"}
+                alt={brand?.name || "The View Yacht Restaurant"}
                 fill
                 className="object-contain object-left"
               />

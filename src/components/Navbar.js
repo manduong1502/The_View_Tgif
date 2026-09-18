@@ -36,8 +36,8 @@ export default function Navbar() {
           >
             <div className="relative h-10 sm:h-12 w-36 sm:w-44">
               <Image
-                src={siteContent.brand.logoHorizontal}
-                alt={siteContent.brand.name}
+                src={siteContent.brand?.logoHorizontal || "/images/logo/TheView-HorizontalLogo-01.png"}
+                alt={siteContent.brand?.name || "The View Yacht Restaurant"}
                 fill
                 priority
                 className="object-contain object-left"

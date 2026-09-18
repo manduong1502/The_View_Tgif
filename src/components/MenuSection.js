@@ -81,8 +81,8 @@ export default function MenuSection() {
                   {/* Dish Image Container */}
                   <div className="relative aspect-square sm:aspect-[4/3] w-full overflow-hidden bg-[#0c1c2e]">
                     <Image
-                      src={dish.image}
-                      alt={dish.name}
+                      src={dish.image || "/images/sashimi.jpg"}
+                      alt={dish.name || "Món ăn The View"}
                       fill
                       className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
@@ -144,8 +144,8 @@ export default function MenuSection() {
           >
             <div className="relative h-64 sm:h-72 w-full">
               <Image
-                src={selectedDish.image}
-                alt={selectedDish.name}
+                src={selectedDish.image || "/images/sashimi.jpg"}
+                alt={selectedDish.name || "Món ăn The View"}
                 fill
                 className="object-cover"
               />

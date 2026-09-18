@@ -28,6 +28,10 @@ export default function AdminDashboard() {
   const [galleryImages, setGalleryImages] = useState([]);
   const [isLoadingGallery, setIsLoadingGallery] = useState(false);
   const [galleryUploadStatus, setGalleryUploadStatus] = useState("");
+  const [isDirty, setIsDirty] = useState(false);
+  const [gallerySearch, setGallerySearch] = useState("");
+  const [galleryFilter, setGalleryFilter] = useState("all");
+  const [copiedUrl, setCopiedUrl] = useState("");
 
   const loadGalleryImages = async () => {
     setIsLoadingGallery(true);
@@ -136,6 +140,7 @@ export default function AdminDashboard() {
 
   // Helper to update deeply nested keys in formData
   const handleFieldChange = (section, key, value) => {
+    setIsDirty(true);
     setFormData((prev) => ({
       ...prev,
       [section]: {
@@ -147,6 +152,7 @@ export default function AdminDashboard() {
 
   // Helper for simple root-level sub-objects
   const handleNestedFieldChange = (section, subSection, key, value) => {
+    setIsDirty(true);
     setFormData((prev) => ({
       ...prev,
       [section]: {
@@ -167,6 +173,7 @@ export default function AdminDashboard() {
     // 1. Call Save to Server with latest formData & currentPass
     const res = await saveToServer(formData, currentPass);
     if (res.success) {
+      setIsDirty(false);
       if (res.updatedContent) {
         setFormData(res.updatedContent);
       }
@@ -185,8 +192,33 @@ export default function AdminDashboard() {
     }
   };
 
+  // Keyboard shortcut (Ctrl+S / Cmd+S)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        handleSave();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [formData]);
+
+  // Warn before leaving page with unsaved edits
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (isDirty) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [isDirty]);
+
   // Dish management
   const handleDishChange = (index, field, value) => {
+    setIsDirty(true);
     setFormData((prev) => {
       const dishes = [...(prev.menu?.dishes || [])];
       dishes[index] = { ...dishes[index], [field]: value };
@@ -198,6 +230,7 @@ export default function AdminDashboard() {
   };
 
   const handleAddDish = () => {
+    setIsDirty(true);
     setFormData((prev) => {
       const dishes = [...(prev.menu?.dishes || [])];
       dishes.push({
@@ -218,6 +251,7 @@ export default function AdminDashboard() {
 
   const handleDeleteDish = (index) => {
     if (!confirm("Bạn có chắc chắn muốn xóa món này không?")) return;
+    setIsDirty(true);
     setFormData((prev) => {
       const dishes = [...(prev.menu?.dishes || [])];
       dishes.splice(index, 1);
@@ -228,8 +262,25 @@ export default function AdminDashboard() {
     });
   };
 
+  const handleMoveDish = (index, direction) => {
+    setIsDirty(true);
+    setFormData((prev) => {
+      const dishes = [...(prev.menu?.dishes || [])];
+      const targetIndex = index + direction;
+      if (targetIndex < 0 || targetIndex >= dishes.length) return prev;
+      const temp = dishes[index];
+      dishes[index] = dishes[targetIndex];
+      dishes[targetIndex] = temp;
+      return {
+        ...prev,
+        menu: { ...prev.menu, dishes },
+      };
+    });
+  };
+
   // Review management
   const handleReviewChange = (index, field, value) => {
+    setIsDirty(true);
     setFormData((prev) => {
       const items = [...(prev.reviews?.items || [])];
       items[index] = { ...items[index], [field]: value };
@@ -241,6 +292,7 @@ export default function AdminDashboard() {
   };
 
   const handleAddReview = () => {
+    setIsDirty(true);
     setFormData((prev) => {
       const items = [...(prev.reviews?.items || [])];
       items.push({
@@ -258,6 +310,7 @@ export default function AdminDashboard() {
 
   const handleDeleteReview = (index) => {
     if (!confirm("Bạn có chắc chắn muốn xóa đánh giá này không?")) return;
+    setIsDirty(true);
     setFormData((prev) => {
       const items = [...(prev.reviews?.items || [])];
       items.splice(index, 1);
@@ -268,8 +321,25 @@ export default function AdminDashboard() {
     });
   };
 
+  const handleMoveReview = (index, direction) => {
+    setIsDirty(true);
+    setFormData((prev) => {
+      const items = [...(prev.reviews?.items || [])];
+      const targetIndex = index + direction;
+      if (targetIndex < 0 || targetIndex >= items.length) return prev;
+      const temp = items[index];
+      items[index] = items[targetIndex];
+      items[targetIndex] = temp;
+      return {
+        ...prev,
+        reviews: { ...prev.reviews, items },
+      };
+    });
+  };
+
   // FAQ management
   const handleFaqChange = (index, field, value) => {
+    setIsDirty(true);
     setFormData((prev) => {
       const items = [...(prev.faqs?.items || [])];
       items[index] = { ...items[index], [field]: value };
@@ -281,6 +351,7 @@ export default function AdminDashboard() {
   };
 
   const handleAddFaq = () => {
+    setIsDirty(true);
     setFormData((prev) => {
       const items = [...(prev.faqs?.items || [])];
       items.push({
@@ -296,9 +367,26 @@ export default function AdminDashboard() {
 
   const handleDeleteFaq = (index) => {
     if (!confirm("Bạn có chắc chắn muốn xóa câu hỏi này không?")) return;
+    setIsDirty(true);
     setFormData((prev) => {
       const items = [...(prev.faqs?.items || [])];
       items.splice(index, 1);
+      return {
+        ...prev,
+        faqs: { ...prev.faqs, items },
+      };
+    });
+  };
+
+  const handleMoveFaq = (index, direction) => {
+    setIsDirty(true);
+    setFormData((prev) => {
+      const items = [...(prev.faqs?.items || [])];
+      const targetIndex = index + direction;
+      if (targetIndex < 0 || targetIndex >= items.length) return prev;
+      const temp = items[index];
+      items[index] = items[targetIndex];
+      items[targetIndex] = temp;
       return {
         ...prev,
         faqs: { ...prev.faqs, items },
@@ -459,6 +547,13 @@ export default function AdminDashboard() {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
+          {isDirty && (
+            <span className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[11px] font-medium animate-in fade-in duration-200">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+              Chưa lưu thay đổi (Ctrl+S)
+            </span>
+          )}
+
           <Link
             href="/"
             target="_blank"
@@ -502,7 +597,8 @@ export default function AdminDashboard() {
             { id: "reviews", label: "Đánh giá thực khách", num: "08" },
             { id: "faqs", label: "Câu hỏi thường gặp", num: "09" },
             { id: "booking", label: "Đặt bàn & Chân trang", num: "10" },
-            { id: "settings", label: "Cài đặt & Mật khẩu", num: "11" },
+            { id: "gallery", label: "Thư viện hình ảnh", num: "11" },
+            { id: "settings", label: "Cài đặt & Mật khẩu", num: "12" },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -842,33 +938,31 @@ export default function AdminDashboard() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="text-[11px] text-slate-300 block mb-1">Tiêu đề khoảnh khắc</label>
-                        <input
-                          type="text"
-                          value={moment.headline}
-                          onChange={(e) => {
-                            const moments = [...(formData.moments || [])];
-                            moments[idx] = { ...moments[idx], headline: e.target.value };
-                            setFormData((prev) => ({ ...prev, moments }));
-                          }}
-                          className="admin-input w-full px-3 py-2 rounded text-xs font-semibold"
-                        />
-                      </div>
+                    <div>
+                      <label className="text-[11px] text-slate-300 block mb-1">Tiêu đề khoảnh khắc</label>
+                      <input
+                        type="text"
+                        value={moment.headline}
+                        onChange={(e) => {
+                          const moments = [...(formData.moments || [])];
+                          moments[idx] = { ...moments[idx], headline: e.target.value };
+                          setFormData((prev) => ({ ...prev, moments }));
+                        }}
+                        className="admin-input w-full px-3 py-2 rounded text-xs font-semibold"
+                      />
+                    </div>
 
-                      <div className="sm:col-span-2">
-                        <ImageUploadField
-                          label="Hình ảnh khoảnh khắc thực tế"
-                          value={moment.image}
-                          onChange={(val) => {
-                            const moments = [...(formData.moments || [])];
-                            moments[idx] = { ...moments[idx], image: val };
-                            setFormData((prev) => ({ ...prev, moments }));
-                          }}
-                          adminPassword={formData?.admin?.passwordHash}
-                        />
-                      </div>
+                    <div>
+                      <ImageUploadField
+                        label="Hình ảnh khoảnh khắc thực tế"
+                        value={moment.image}
+                        onChange={(val) => {
+                          const moments = [...(formData.moments || [])];
+                          moments[idx] = { ...moments[idx], image: val };
+                          setFormData((prev) => ({ ...prev, moments }));
+                        }}
+                        adminPassword={formData?.admin?.passwordHash}
+                      />
                     </div>
 
                     <div>
@@ -924,7 +1018,7 @@ export default function AdminDashboard() {
                   <span className="text-xs text-[#cba864] font-semibold block">3 Khu Vực Chỗ Ngồi (Zones)</span>
                   {(formData.experience?.zones || []).map((zone, idx) => (
                     <div key={zone.id} className="p-4 bg-[#081524] rounded-xl border border-white/5 space-y-3">
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         <div>
                           <label className="text-[11px] text-slate-400 block mb-1">Mã không gian</label>
                           <input
@@ -964,9 +1058,6 @@ export default function AdminDashboard() {
                             className="admin-input w-full px-3 py-1.5 rounded text-xs"
                           />
                         </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                           <label className="text-[11px] text-slate-400 block mb-1">Huy hiệu</label>
                           <input
@@ -980,18 +1071,19 @@ export default function AdminDashboard() {
                             className="admin-input w-full px-3 py-1.5 rounded text-xs"
                           />
                         </div>
-                        <div className="sm:col-span-2">
-                          <ImageUploadField
-                            label="Hình ảnh khu vực boong tàu"
-                            value={zone.image}
-                            onChange={(val) => {
-                              const zones = [...(formData.experience?.zones || [])];
-                              zones[idx] = { ...zones[idx], image: val };
-                              handleFieldChange("experience", "zones", zones);
-                            }}
-                            adminPassword={formData?.admin?.passwordHash}
-                          />
-                        </div>
+                      </div>
+
+                      <div>
+                        <ImageUploadField
+                          label="Hình ảnh khu vực boong tàu"
+                          value={zone.image}
+                          onChange={(val) => {
+                            const zones = [...(formData.experience?.zones || [])];
+                            zones[idx] = { ...zones[idx], image: val };
+                            handleFieldChange("experience", "zones", zones);
+                          }}
+                          adminPassword={formData?.admin?.passwordHash}
+                        />
                       </div>
 
                       <div>
@@ -1063,16 +1155,36 @@ export default function AdminDashboard() {
                       <span className="text-xs font-bold text-[#cba864]">
                         Món #{idx + 1}: {dish.name}
                       </span>
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteDish(idx)}
-                        className="text-xs text-rose-400 hover:text-rose-300 px-2.5 py-1 rounded bg-rose-950/40 border border-rose-800/40 cursor-pointer"
-                      >
-                        Xóa món
-                      </button>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          disabled={idx === 0}
+                          onClick={() => handleMoveDish(idx, -1)}
+                          className="text-xs px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                          title="Di chuyển lên trên"
+                        >
+                          ▲
+                        </button>
+                        <button
+                          type="button"
+                          disabled={idx === (formData.menu?.dishes?.length || 0) - 1}
+                          onClick={() => handleMoveDish(idx, 1)}
+                          className="text-xs px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                          title="Di chuyển xuống dưới"
+                        >
+                          ▼
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteDish(idx)}
+                          className="text-xs text-rose-400 hover:text-rose-300 px-2.5 py-0.5 rounded bg-rose-950/40 border border-rose-800/40 cursor-pointer ml-1"
+                        >
+                          Xóa
+                        </button>
+                      </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                       <div>
                         <label className="text-[11px] text-slate-300 block mb-1">Tên món ăn</label>
                         <input
@@ -1103,9 +1215,7 @@ export default function AdminDashboard() {
                           className="admin-input w-full px-3 py-2 rounded text-xs"
                         />
                       </div>
-                    </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
                         <label className="text-[11px] text-slate-300 block mb-1">Nhãn Highlight (Badge)</label>
                         <input
@@ -1116,15 +1226,15 @@ export default function AdminDashboard() {
                           className="admin-input w-full px-3 py-2 rounded text-xs"
                         />
                       </div>
+                    </div>
 
-                      <div className="sm:col-span-3">
-                        <ImageUploadField
-                          label="Hình ảnh món ăn"
-                          value={dish.image}
-                          onChange={(val) => handleDishChange(idx, "image", val)}
-                          adminPassword={formData?.admin?.passwordHash}
-                        />
-                      </div>
+                    <div>
+                      <ImageUploadField
+                        label="Hình ảnh món ăn"
+                        value={dish.image}
+                        onChange={(val) => handleDishChange(idx, "image", val)}
+                        adminPassword={formData?.admin?.passwordHash}
+                      />
                     </div>
 
                     <div>
@@ -1326,13 +1436,33 @@ export default function AdminDashboard() {
                   <div key={idx} className="p-4 bg-[#081524] rounded-xl border border-white/5 space-y-3">
                     <div className="flex items-center justify-between pb-2 border-b border-white/5">
                       <span className="text-xs font-bold text-[#cba864]">Đánh giá #{idx + 1}</span>
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteReview(idx)}
-                        className="text-xs text-rose-400 hover:text-rose-300 px-2.5 py-1 rounded bg-rose-950/40 border border-rose-800/40 cursor-pointer"
-                      >
-                        Xóa
-                      </button>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          disabled={idx === 0}
+                          onClick={() => handleMoveReview(idx, -1)}
+                          className="text-xs px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                          title="Di chuyển lên trên"
+                        >
+                          ▲
+                        </button>
+                        <button
+                          type="button"
+                          disabled={idx === (formData.reviews?.items?.length || 0) - 1}
+                          onClick={() => handleMoveReview(idx, 1)}
+                          className="text-xs px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                          title="Di chuyển xuống dưới"
+                        >
+                          ▼
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteReview(idx)}
+                          className="text-xs text-rose-400 hover:text-rose-300 px-2.5 py-0.5 rounded bg-rose-950/40 border border-rose-800/40 cursor-pointer ml-1"
+                        >
+                          Xóa
+                        </button>
+                      </div>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -1404,13 +1534,33 @@ export default function AdminDashboard() {
                   <div key={idx} className="p-4 bg-[#081524] rounded-xl border border-white/5 space-y-3">
                     <div className="flex items-center justify-between pb-2 border-b border-white/5">
                       <span className="text-xs font-bold text-[#cba864]">Câu hỏi #{idx + 1}</span>
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteFaq(idx)}
-                        className="text-xs text-rose-400 hover:text-rose-300 px-2.5 py-1 rounded bg-rose-950/40 border border-rose-800/40 cursor-pointer"
-                      >
-                        Xóa
-                      </button>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          disabled={idx === 0}
+                          onClick={() => handleMoveFaq(idx, -1)}
+                          className="text-xs px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                          title="Di chuyển lên trên"
+                        >
+                          ▲
+                        </button>
+                        <button
+                          type="button"
+                          disabled={idx === (formData.faqs?.items?.length || 0) - 1}
+                          onClick={() => handleMoveFaq(idx, 1)}
+                          className="text-xs px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                          title="Di chuyển xuống dưới"
+                        >
+                          ▼
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteFaq(idx)}
+                          className="text-xs text-rose-400 hover:text-rose-300 px-2.5 py-0.5 rounded bg-rose-950/40 border border-rose-800/40 cursor-pointer ml-1"
+                        >
+                          Xóa
+                        </button>
+                      </div>
                     </div>
 
                     <div>
@@ -1507,18 +1657,18 @@ export default function AdminDashboard() {
             </div>
           )}
 
-                    {/* TAB 11: GALLERY & UPLOADS */}
+          {/* TAB 11: GALLERY & UPLOADS */}
           {activeTab === "gallery" && (
             <div className="space-y-6">
               <div className="border-b border-white/10 pb-4 flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <h2 className="font-serif text-xl sm:text-2xl text-white">Thư Viện Hình Ảnh</h2>
-                  <p className="text-xs text-slate-300 mt-1">Quản lý và tải ảnh trực tiếp từ thiết bị vào thư mục uploads của hệ thống.</p>
+                  <p className="text-xs text-slate-300 mt-1">Quản lý, tìm kiếm và tải ảnh trực tiếp từ thiết bị vào hệ thống.</p>
                 </div>
 
                 <div>
                   <label className="admin-btn-gold px-4 py-2.5 rounded text-xs font-bold uppercase tracking-wider cursor-pointer flex items-center gap-2">
-                    <span>Tải ảnh mới vào thư viện ↑</span>
+                    <span>+ Tải ảnh mới từ máy</span>
                     <input
                       type="file"
                       multiple
@@ -1536,6 +1686,55 @@ export default function AdminDashboard() {
                 </div>
               )}
 
+              {/* Filter & Search Bar */}
+              <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-[#081524] rounded-xl border border-white/10">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setGalleryFilter("all")}
+                    className={`px-3 py-1.5 rounded text-xs font-medium cursor-pointer transition-colors ${
+                      galleryFilter === "all"
+                        ? "bg-[#cba864] text-[#060e18] font-bold"
+                        : "bg-white/5 text-slate-300 hover:bg-white/10"
+                    }`}
+                  >
+                    Tất cả ({galleryImages.length})
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setGalleryFilter("upload")}
+                    className={`px-3 py-1.5 rounded text-xs font-medium cursor-pointer transition-colors ${
+                      galleryFilter === "upload"
+                        ? "bg-[#cba864] text-[#060e18] font-bold"
+                        : "bg-white/5 text-slate-300 hover:bg-white/10"
+                    }`}
+                  >
+                    Đã tải lên (/uploads/)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setGalleryFilter("system")}
+                    className={`px-3 py-1.5 rounded text-xs font-medium cursor-pointer transition-colors ${
+                      galleryFilter === "system"
+                        ? "bg-[#cba864] text-[#060e18] font-bold"
+                        : "bg-white/5 text-slate-300 hover:bg-white/10"
+                    }`}
+                  >
+                    Ảnh mẫu nhà hàng
+                  </button>
+                </div>
+
+                <div className="w-full sm:w-64">
+                  <input
+                    type="text"
+                    placeholder="Tìm theo tên file ảnh..."
+                    value={gallerySearch}
+                    onChange={(e) => setGallerySearch(e.target.value)}
+                    className="admin-input w-full px-3 py-1.5 rounded text-xs"
+                  />
+                </div>
+              </div>
+
               {/* Image Grid */}
               {isLoadingGallery ? (
                 <div className="py-12 text-center text-slate-400 text-xs">
@@ -1544,42 +1743,58 @@ export default function AdminDashboard() {
               ) : galleryImages.length === 0 ? (
                 <div className="py-12 px-6 border-2 border-dashed border-white/10 rounded-2xl text-center space-y-3">
                   <p className="text-sm text-slate-300 font-medium">Chưa có ảnh nào trong thư mục tải lên</p>
-                  <p className="text-xs text-slate-400">Bấm nút &quot;Tải ảnh mới vào thư viện&quot; phía trên hoặc tải ảnh trực tiếp ở các mục thực đơn/khu vực để đưa ảnh vào hệ thống.</p>
+                  <p className="text-xs text-slate-400">Bấm nút &quot;Tải ảnh mới từ máy&quot; phía trên hoặc tải ảnh trực tiếp ở các mục thực đơn/khu vực để đưa ảnh vào hệ thống.</p>
                 </div>
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                  {galleryImages.map((img, idx) => (
-                    <div
-                      key={idx}
-                      className="p-2.5 bg-[#091728] rounded-xl border border-white/10 space-y-2"
-                    >
-                      <div className="relative aspect-video rounded-lg overflow-hidden bg-[#050d18]">
-                        <img
-                          src={img.url}
-                          alt={img.name}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <p className="text-[11px] text-slate-200 font-medium truncate" title={img.name}>
-                          {img.name}
-                        </p>
-                        <div className="flex items-center justify-between text-[10px] text-slate-400">
-                          <span>{(img.size / 1024).toFixed(0)} KB</span>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              navigator.clipboard.writeText(img.url);
-                              alert("Đã sao chép đường dẫn: " + img.url);
-                            }}
-                            className="text-[#cba864] hover:underline cursor-pointer font-semibold"
-                          >
-                            Sao chép link
-                          </button>
+                  {galleryImages
+                    .filter((img) => {
+                      if (galleryFilter === "upload" && !img.url.startsWith("/uploads/")) return false;
+                      if (galleryFilter === "system" && img.url.startsWith("/uploads/")) return false;
+                      if (gallerySearch.trim()) {
+                        const q = gallerySearch.toLowerCase();
+                        return (img.name || "").toLowerCase().includes(q) || (img.url || "").toLowerCase().includes(q);
+                      }
+                      return true;
+                    })
+                    .map((img, idx) => (
+                      <div
+                        key={idx}
+                        className="p-2.5 bg-[#091728] rounded-xl border border-white/10 space-y-2 hover:border-[#cba864]/50 transition-colors"
+                      >
+                        <div className="relative aspect-video rounded-lg overflow-hidden bg-[#050d18]">
+                          <img
+                            src={img.url}
+                            alt={img.name}
+                            className="w-full h-full object-cover"
+                            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <p className="text-[11px] text-slate-200 font-medium truncate" title={img.name}>
+                            {img.name}
+                          </p>
+                          <div className="flex items-center justify-between text-[10px] text-slate-400">
+                            <span>{img.size ? `${(img.size / 1024).toFixed(0)} KB` : "Mẫu sẵn"}</span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                navigator.clipboard.writeText(img.url);
+                                setCopiedUrl(img.url);
+                                setTimeout(() => setCopiedUrl(""), 2000);
+                              }}
+                              className={`font-semibold cursor-pointer ${
+                                copiedUrl === img.url
+                                  ? "text-emerald-400 font-bold"
+                                  : "text-[#cba864] hover:underline"
+                              }`}
+                            >
+                              {copiedUrl === img.url ? "Đã chép link! ✓" : "Sao chép link"}
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               )}
             </div>
@@ -1689,8 +1904,15 @@ export default function AdminDashboard() {
 
           {/* BOTTOM QUICK SAVE ACTION BUTTON */}
           <div className="mt-8 pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
-            <div className="text-xs text-slate-400">
-              Nhấn <strong className="text-[#cba864]">LƯU TẤT CẢ THAY ĐỔI</strong> để áp dụng ngay lên website.
+            <div className="text-xs text-slate-400 flex items-center gap-2">
+              {isDirty ? (
+                <span className="text-amber-300 font-medium flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                  Bạn có thay đổi chưa lưu. Hãy nhấn nút để áp dụng lên website! (hoặc nhấn Ctrl+S)
+                </span>
+              ) : (
+                <span>Tất cả thay đổi đã được đồng bộ an toàn.</span>
+              )}
             </div>
 
             <button

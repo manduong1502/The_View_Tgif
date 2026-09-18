@@ -38,7 +38,7 @@ export default function EventsSection({ onSelectPartyType }) {
 
         {/* 3 Cards Grid with Staggered ScrollReveal */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-          {events.cards.map((card, idx) => (
+          {(events?.cards || []).map((card, idx) => (
             <ScrollReveal
               key={idx}
               delay={idx === 0 ? "delay-100" : idx === 1 ? "delay-200" : "delay-300"}

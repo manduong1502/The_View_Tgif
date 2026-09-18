@@ -25,8 +25,8 @@ export default function HeroSection() {
             } transform transition-transform duration-1000`}
           >
             <Image
-              src={moment.image}
-              alt={`${siteContent.brand.name} - ${moment.headline}`}
+              src={moment.image || "/images/the-view-sunset.jpg"}
+              alt={`${siteContent.brand?.name || "The View"} - ${moment.headline || "Du Thuyền The View"}`}
               fill
               priority={moment.id === "sunset"}
               className="object-cover object-center"

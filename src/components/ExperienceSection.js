@@ -36,8 +36,8 @@ export default function ExperienceSection() {
             <ScrollReveal delay="delay-100">
               <div className="relative aspect-[16/11] w-full rounded-xl overflow-hidden luxury-card border border-[#cba864]/30 shadow-2xl group">
                 <Image
-                  src={activeZone.image}
-                  alt={activeZone.title}
+                  src={activeZone?.image || "/images/the-view-sunset.jpg"}
+                  alt={activeZone?.title || "Không gian du thuyền The View"}
                   fill
                   className="object-cover transition-all duration-700 ease-out group-hover:scale-105"
                   quality={95}

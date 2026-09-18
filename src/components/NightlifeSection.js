@@ -62,7 +62,7 @@ export default function NightlifeSection() {
             <ScrollReveal delay="delay-200">
               <div className="relative aspect-square sm:aspect-[4/3] lg:aspect-square w-full rounded-xl overflow-hidden luxury-card border border-[#cba864]/30 shadow-2xl group">
                 <Image
-                  src={nightlife.image}
+                  src={nightlife?.image || "/images/the-view-night.jpg"}
                   alt="The View Nightlife Celebration Da Nang"
                   fill
                   className="object-cover object-center transition-transform duration-1000 ease-out group-hover:scale-105"
