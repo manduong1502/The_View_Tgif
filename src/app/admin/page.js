@@ -103,7 +103,7 @@ export default function AdminDashboard() {
     } else {
       setSaveStatus({
         state: "error",
-        message: res.message || "Lỗi lưu dữ liệu. Vui lòng thử tải file JSON!",
+        message: res.message || "Lỗi lưu dữ liệu. Vui lòng kiểm tra lại kết nối mạng!",
       });
     }
   };
@@ -239,7 +239,7 @@ export default function AdminDashboard() {
       if (typeof contentStr === "string") {
         const res = importJson(contentStr);
         if (res.success) {
-          alert("Đã nhập nội dung từ file JSON thành công!");
+          alert("Đã khôi phục dữ liệu từ bản sao lưu thành công!");
         } else {
           alert("Lỗi: " + res.error);
         }
@@ -391,15 +391,6 @@ export default function AdminDashboard() {
 
           <button
             type="button"
-            onClick={exportJson}
-            className="admin-btn-secondary px-3 sm:px-4 py-2 rounded text-xs font-medium flex items-center gap-1.5 cursor-pointer"
-            title="Tải file content.json về máy tính để sao lưu"
-          >
-            <span>Tải file JSON</span>
-          </button>
-
-          <button
-            type="button"
             onClick={handleSave}
             disabled={saveStatus.state === "saving"}
             className="admin-btn-gold px-4 sm:px-6 py-2 rounded text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-[#cba864]/20 cursor-pointer"
@@ -422,18 +413,6 @@ export default function AdminDashboard() {
       <div className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* SIDEBAR TABS */}
         <div className="lg:col-span-3 space-y-1.5 sticky top-24">
-          <div className="p-3 bg-[#0a1728] border border-[#cba864]/20 rounded-xl mb-4">
-            <span className="text-[10px] tracking-widest text-[#cba864] font-semibold uppercase block mb-1">
-              File Dữ Liệu
-            </span>
-            <code className="text-xs text-emerald-400 block break-all font-mono">
-              /content.json
-            </code>
-            <span className="text-[10px] text-slate-400 mt-1 block">
-              Lưu trực tiếp cPanel & đồng bộ tức thì
-            </span>
-          </div>
-
           {[
             { id: "brand", label: "Thương hiệu & Hotline", num: "01" },
             { id: "hero", label: "Hero Banner", num: "02" },
@@ -445,7 +424,7 @@ export default function AdminDashboard() {
             { id: "reviews", label: "Đánh giá thực khách", num: "08" },
             { id: "faqs", label: "Câu hỏi thường gặp", num: "09" },
             { id: "booking", label: "Đặt bàn & Chân trang", num: "10" },
-            { id: "settings", label: "Cài đặt & Dữ liệu", num: "11" },
+            { id: "settings", label: "Cài đặt & Mật khẩu", num: "11" },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -459,7 +438,7 @@ export default function AdminDashboard() {
             >
               <span className="flex items-center gap-2.5">
                 <span
-                  className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${
+                  className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
                     activeTab === tab.id
                       ? "bg-[#060e18]/20 text-[#060e18] font-bold"
                       : "bg-white/5 text-[#cba864]"
@@ -469,7 +448,7 @@ export default function AdminDashboard() {
                 </span>
                 <span>{tab.label}</span>
               </span>
-              <span className="text-[11px] opacity-40 font-mono">→</span>
+              <span className="text-[11px] opacity-40">→</span>
             </button>
           ))}
         </div>
@@ -591,7 +570,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={formData.brand?.logoHorizontal || ""}
                     onChange={(e) => handleFieldChange("brand", "logoHorizontal", e.target.value)}
-                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm font-mono text-xs"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm"
                   />
                 </div>
 
@@ -601,7 +580,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={formData.brand?.logoSquare || ""}
                     onChange={(e) => handleFieldChange("brand", "logoSquare", e.target.value)}
-                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm font-mono text-xs"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-sm"
                   />
                 </div>
               </div>
@@ -814,7 +793,7 @@ export default function AdminDashboard() {
                             moments[idx] = { ...moments[idx], image: e.target.value };
                             setFormData((prev) => ({ ...prev, moments }));
                           }}
-                          className="admin-input w-full px-3 py-2 rounded text-xs font-mono"
+                          className="admin-input w-full px-3 py-2 rounded text-xs"
                         />
                       </div>
                     </div>
@@ -938,7 +917,7 @@ export default function AdminDashboard() {
                               zones[idx] = { ...zones[idx], image: e.target.value };
                               handleFieldChange("experience", "zones", zones);
                             }}
-                            className="admin-input w-full px-3 py-1.5 rounded text-xs font-mono"
+                            className="admin-input w-full px-3 py-1.5 rounded text-xs"
                           />
                         </div>
                       </div>
@@ -1072,7 +1051,7 @@ export default function AdminDashboard() {
                           type="text"
                           value={dish.image}
                           onChange={(e) => handleDishChange(idx, "image", e.target.value)}
-                          className="admin-input w-full px-3 py-2 rounded text-xs font-mono"
+                          className="admin-input w-full px-3 py-2 rounded text-xs"
                         />
                       </div>
                     </div>
@@ -1428,7 +1407,7 @@ export default function AdminDashboard() {
                       const lines = e.target.value.split("\n").filter((l) => l.trim().length > 0);
                       handleFieldChange("booking", "guestOptions", lines);
                     }}
-                    className="admin-input w-full px-3.5 py-2.5 rounded text-xs font-mono leading-relaxed"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-xs leading-relaxed"
                   />
                 </div>
 
@@ -1441,7 +1420,7 @@ export default function AdminDashboard() {
                       const lines = e.target.value.split("\n").filter((l) => l.trim().length > 0);
                       handleFieldChange("booking", "partyTypes", lines);
                     }}
-                    className="admin-input w-full px-3.5 py-2.5 rounded text-xs font-mono leading-relaxed"
+                    className="admin-input w-full px-3.5 py-2.5 rounded text-xs leading-relaxed"
                   />
                 </div>
               </div>
@@ -1452,8 +1431,8 @@ export default function AdminDashboard() {
           {activeTab === "settings" && (
             <div className="space-y-8">
               <div className="border-b border-white/10 pb-4">
-                <h2 className="font-serif text-xl sm:text-2xl text-white">Cài Đặt Hệ Thống & Sao Lưu</h2>
-                <p className="text-xs text-slate-300 mt-1">Đổi mật khẩu truy cập admin, tải file JSON hoặc khôi phục dữ liệu.</p>
+                <h2 className="font-serif text-xl sm:text-2xl text-white">Cài Đặt Hệ Thống & Mật Khẩu</h2>
+                <p className="text-xs text-slate-300 mt-1">Đổi mật khẩu tài khoản quản trị và các tùy chọn sao lưu an toàn.</p>
               </div>
 
               {/* CHANGE PASSWORD */}
@@ -1499,12 +1478,11 @@ export default function AdminDashboard() {
                 </form>
               </div>
 
-              {/* BACKUP & RESTORE JSON */}
+              {/* BACKUP & RESTORE */}
               <div className="p-5 bg-[#091728] rounded-xl border border-white/10 space-y-4">
-                <h3 className="font-serif text-base text-[#cba864] font-medium">Sao Lưu & Khôi Phục File JSON</h3>
+                <h3 className="font-serif text-base text-[#cba864] font-medium">Sao Lưu & Khôi Phục Dữ Liệu</h3>
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  Toàn bộ dữ liệu cài đặt trang web được lưu tại file <code className="text-emerald-400 font-mono">/content.json</code>.
-                  Bạn có thể tải file này về máy tính để lưu trữ dự phòng, hoặc upload một file JSON khác để thay đổi toàn bộ website trong 1 giây.
+                  Bạn có thể tải về bản sao lưu toàn bộ nội dung website về máy tính cá nhân để lưu trữ an toàn, hoặc tải lên bản sao lưu đã lưu trước đó để phục hồi nội dung bất cứ lúc nào.
                 </p>
 
                 <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -1513,11 +1491,11 @@ export default function AdminDashboard() {
                     onClick={exportJson}
                     className="admin-btn-gold px-4 py-2.5 rounded text-xs font-bold uppercase tracking-wider cursor-pointer"
                   >
-                    Tải file content.json về máy
+                    Tải bản sao lưu về máy
                   </button>
 
                   <label className="admin-btn-secondary px-4 py-2.5 rounded text-xs font-medium cursor-pointer hover:border-[#cba864]">
-                    Nhập dữ liệu từ file JSON
+                    Khôi phục từ bản sao lưu
                     <input
                       type="file"
                       accept=".json"
@@ -1530,7 +1508,7 @@ export default function AdminDashboard() {
 
               {/* FACTORY RESET */}
               <div className="p-5 bg-rose-950/20 rounded-xl border border-rose-800/30 space-y-3">
-                <h3 className="font-serif text-base text-rose-400 font-medium">Khôi Phục Dữ Liệu Gốc (Factory Reset)</h3>
+                <h3 className="font-serif text-base text-rose-400 font-medium">Khôi Phục Mặc Định Ban Đầu</h3>
                 <p className="text-xs text-slate-400 leading-relaxed">
                   Thao tác này sẽ xóa tất cả các thay đổi tùy chỉnh và đưa nội dung website quay về bản thiết kế gốc ban đầu.
                 </p>
@@ -1553,7 +1531,7 @@ export default function AdminDashboard() {
           {/* BOTTOM QUICK SAVE ACTION BUTTON */}
           <div className="mt-8 pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
             <div className="text-xs text-slate-400">
-              Mọi thay đổi sẽ được cập nhật vào <span className="text-emerald-400 font-mono">content.json</span>
+              Nhấn <strong className="text-[#cba864]">LƯU TẤT CẢ THAY ĐỔI</strong> để áp dụng ngay lên website.
             </div>
 
             <button
