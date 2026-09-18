@@ -123,7 +123,7 @@
         "title": "Dãy Bàn Tiệc Hoàng Hôn",
         "description": "Dãy bàn dài gỗ mộc tự nhiên hướng Tây đón trọn hoàng hôn dát vàng trên sông Hàn. Lựa chọn hoàn hảo cho tiệc kỷ niệm và hẹn hò lãng mạn.",
         "badge": "Golden Hour View",
-        "image": "/uploads/theview_20260918041241_Bracelets_ib64e.png",
+        "image": "/images/the-view-sunset.jpg",
         "capacity": "2 - 30 Khách"
       },
       {
@@ -361,6 +361,6 @@
   },
   "admin": {
     "passwordHash": "theview@2026",
-    "updatedAt": "2026-09-18T04:21:13.416Z"
+    "updatedAt": "2026-09-18T04:41:00.491Z"
   }
 }

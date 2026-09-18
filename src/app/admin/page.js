@@ -32,11 +32,40 @@ export default function AdminDashboard() {
   const loadGalleryImages = async () => {
     setIsLoadingGallery(true);
     try {
-      const res = await fetch("/api/upload.php?action=list");
-      const data = await res.json();
-      if (data.success && Array.isArray(data.files)) {
-        setGalleryImages(data.files);
-      }
+      const map = new Map();
+
+      // 1. Try production PHP endpoint
+      try {
+        const res = await fetch("/api/upload.php?action=list");
+        const contentType = res.headers.get("content-type") || "";
+        if (res.ok && contentType.includes("json")) {
+          const data = await res.json();
+          if (data.success && Array.isArray(data.files)) {
+            data.files.forEach((f) => map.set(f.url, f));
+          }
+        }
+      } catch (e) {}
+
+      // 2. Try dev upload server (port 3002)
+      try {
+        const resDev = await fetch("http://localhost:3002/list");
+        if (resDev.ok) {
+          const dataDev = await resDev.json();
+          if (dataDev.success && Array.isArray(dataDev.files)) {
+            dataDev.files.forEach((f) => map.set(f.url, f));
+          }
+        }
+      } catch (e) {}
+
+      // 3. Fallback: LocalStorage uploads
+      try {
+        const localUploads = JSON.parse(localStorage.getItem("theview_local_uploads") || "[]");
+        localUploads.forEach((f) => {
+          if (!map.has(f.url)) map.set(f.url, f);
+        });
+      } catch (e) {}
+
+      setGalleryImages(Array.from(map.values()));
     } catch (e) {
       console.error("Gallery fetch error:", e);
     } finally {
