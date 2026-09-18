@@ -15,7 +15,7 @@ export default function HeroSection() {
 
   return (
     <section className="relative min-h-[96vh] lg:min-h-screen flex flex-col justify-between pt-28 sm:pt-36 pb-10 overflow-hidden">
-      {/* Background Images with Cross-fade & Luxury Dark Navy Overlays */}
+      {/* Background Images with Cross-fade & Crystal Clear Presentation */}
       <div className="absolute inset-0 z-0">
         {moments.map((moment) => (
           <div
@@ -28,17 +28,23 @@ export default function HeroSection() {
               src={moment.image || "/images/the-view-sunset.jpg"}
               alt={`${siteContent.brand?.name || "The View"} - ${moment.headline || "Du Thuyền The View"}`}
               fill
-              priority={moment.id === "sunset"}
-              className="object-cover object-center"
+              priority={moment.id === "sunset" || moment.id === activeMomentId}
+              className="object-cover object-center brightness-[1.03] contrast-[1.02]"
               quality={95}
+              sizes="100vw"
             />
           </div>
         ))}
 
-        {/* Multi-layered Deep Navy & Champagne Vignettes */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#060e18]/95 via-[#060e18]/80 to-[#060e18]/45" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#060e18] via-[#060e18]/30 to-[#060e18]/80" />
-        <div className="absolute inset-0 bg-[#060e18]/30 backdrop-brightness-95" />
+        {/* Crisp & vivid atmosphere: Keep photo bright while guaranteeing 100% text readability */}
+        {/* Directional left gradient focused behind text */}
+        <div className="absolute inset-y-0 left-0 w-full sm:w-4/5 lg:w-3/5 bg-gradient-to-r from-[#060e18]/85 via-[#060e18]/45 to-transparent pointer-events-none" />
+
+        {/* Top vignette for clean navbar readability */}
+        <div className="absolute top-0 inset-x-0 h-28 sm:h-36 bg-gradient-to-b from-[#060e18]/80 via-[#060e18]/25 to-transparent pointer-events-none" />
+
+        {/* Bottom vignette blending seamlessly into dark navy page base */}
+        <div className="absolute bottom-0 inset-x-0 h-36 sm:h-48 bg-gradient-to-t from-[#060e18] via-[#060e18]/50 to-transparent pointer-events-none" />
       </div>
 
       {/* Main Content Container */}
@@ -48,13 +54,13 @@ export default function HeroSection() {
           <div className="lg:col-span-8 max-w-2xl">
             {/* Kicker Line */}
             <div className="mb-4 sm:mb-6 animate-in fade-in slide-in-from-bottom-3 duration-700">
-              <span className="kicker-line text-xs sm:text-sm tracking-[0.22em]">
+              <span className="kicker-line text-xs sm:text-sm tracking-[0.22em] drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)]">
                 {hero.kicker}
               </span>
             </div>
 
             {/* Editorial Headline */}
-            <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl text-white font-normal leading-[1.18] sm:leading-[1.12] mb-5 tracking-tight animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
+            <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl text-white font-normal leading-[1.18] sm:leading-[1.12] mb-5 tracking-tight animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100 drop-shadow-[0_3px_14px_rgba(0,0,0,0.95)]">
               {hero.titleLine1} <br />
               <span className="italic font-serif text-gold-gradient font-light drop-shadow-md">
                 {hero.titleLine2Highlight}
@@ -63,7 +69,7 @@ export default function HeroSection() {
             </h1>
 
             {/* Subtitle description */}
-            <p className="text-slate-200 text-sm sm:text-base lg:text-lg font-light leading-relaxed mb-7 sm:mb-9 max-w-xl animate-in fade-in slide-in-from-bottom-5 duration-700 delay-200">
+            <p className="text-slate-100 text-sm sm:text-base lg:text-lg font-light leading-relaxed mb-7 sm:mb-9 max-w-xl animate-in fade-in slide-in-from-bottom-5 duration-700 delay-200 drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
               {hero.description}
             </p>
 
@@ -71,7 +77,7 @@ export default function HeroSection() {
             <div className="flex flex-wrap items-center gap-4 sm:gap-5 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-300">
               <a
                 href="#dat-ban"
-                className="btn-gold px-8 py-4 rounded-sm text-xs sm:text-sm font-bold tracking-wider uppercase inline-flex items-center gap-3 group"
+                className="btn-gold px-8 py-4 rounded-sm text-xs sm:text-sm font-bold tracking-wider uppercase inline-flex items-center gap-3 group shadow-xl"
               >
                 <span>{hero.ctaPrimary}</span>
                 <span className="transition-transform duration-300 group-hover:translate-x-1.5 font-sans">
@@ -80,7 +86,7 @@ export default function HeroSection() {
               </a>
               <a
                 href="#thuc-don"
-                className="btn-glass px-7 py-4 rounded-sm text-xs sm:text-sm font-medium tracking-wider uppercase"
+                className="btn-glass px-7 py-4 rounded-sm text-xs sm:text-sm font-medium tracking-wider uppercase shadow-lg bg-[#060e18]/70 backdrop-blur-md border border-white/25 hover:border-[#cba864]"
               >
                 {hero.ctaSecondary}
               </a>
@@ -137,10 +143,10 @@ export default function HeroSection() {
               key={idx}
               className="flex flex-col group transition-all duration-300 hover:translate-x-1"
             >
-              <span className="font-serif text-xl sm:text-2xl font-bold text-gold-gradient tracking-wide mb-1">
+              <span className="font-serif text-xl sm:text-2xl font-bold text-gold-gradient tracking-wide mb-1 drop-shadow-sm">
                 {stat.value}
               </span>
-              <span className="text-xs sm:text-sm text-slate-300 font-light">
+              <span className="text-xs sm:text-sm text-slate-200 font-light drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
                 {stat.label}
               </span>
             </div>
